@@ -5,12 +5,10 @@ import com.curso.JWTAuthenticationRest.model.Login;
 import com.curso.JWTAuthenticationRest.security.JwtGenerator;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -24,7 +22,7 @@ public class TokenController {
     }
 
     @PostMapping
-    public ResponseEntity<?> generate(@RequestBody final Login login) {
+    public ResponseEntity<?> generate( Login login) {
         JwtUser jwtUser = new JwtUser();
 
         jwtUser = existUser(login);
@@ -39,7 +37,6 @@ public class TokenController {
     }
 
     private JwtUser existUser(Login login) {
-
         if(login.getUser().equals("manuel") && login.getPassword().equals("1234")) {
             JwtUser jwtUser = new JwtUser();
             jwtUser.setUsername(login.getUser());
@@ -49,5 +46,10 @@ public class TokenController {
         }else  {
             return null;
         }
+    }
+
+    @RequestMapping("/hello")
+    public String hello(){
+        return "hello";
     }
 }

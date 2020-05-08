@@ -7,6 +7,8 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.stereotype.Component;
 
+import java.util.Date;
+
 @Component
 public class JwtGenerator {
 
@@ -19,6 +21,7 @@ public class JwtGenerator {
         return Jwts.builder()
                 .setClaims(claims)
                 .signWith(SignatureAlgorithm.HS256, Constants.YOUR_SECRET)
+                .setExpiration(new Date(System.currentTimeMillis() + 40000))
                 .compact();
     }
 }

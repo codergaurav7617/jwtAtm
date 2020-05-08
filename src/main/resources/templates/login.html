@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Login</title>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.js"></script>
+    <script src="http://malsup.github.com/jquery.form.js"></script>
+</head>
+<body>
+
+<form  method="post" id="form2">
+    <label for="username">Enter the username:</label><br>
+    <input type="text" id="username" name="user"><br><br>
+    <label for="pass">Enter the password:</label><br>
+    <input type="text" id="pass" name="password"><br><br>
+</form>
+<button type="submit" form="form2" value="Submit">login</button>
+<br><br>
+
+<input id="submitButton" type="button" th:value="Button" />
+
+<a href="SignUp.html">Sign Up</a>
+
+<script>
+    $('#form2')
+        .ajaxForm({
+            url : '/token', // url
+            dataType : 'json',
+            success : function (response) {
+                localStorage.setItem("token",response);
+            },
+            error : function (response) {
+                // alert(JSON.parse(response["responseText"]).errorMessage);
+                // document.getElementById("exp").value="";
+            }
+        })
+    ;
+    console.log("Hello");
+</script>
+
+<script>
+    $('#submitButton').on('click',function(){
+        $.ajax({
+            url: "/api/access_only_with_jwt",
+            type: 'GET',
+            contentType: 'application/json',
+            headers: {
+                "Authorization": "Bearer " + localStorage.getItem("token")
+            },
+            async: false,
+            success : function (response) {
+                console.log(response)
+            },
+            error : function (response) {
+                var status_code=JSON.parse(response["responseText"]).status;
+                if (status_code==500){
+                    window.open("http://localhost:8048/login");
+                }
+            }
+        })
+    });
+</script>
+
+</body>
+</html>

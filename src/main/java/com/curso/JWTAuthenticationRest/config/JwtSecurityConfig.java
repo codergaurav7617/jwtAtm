@@ -15,13 +15,15 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.Collections;
 
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @EnableWebSecurity
 @Component
-public class JwtSecurityConfig extends WebSecurityConfigurerAdapter {
+public class JwtSecurityConfig extends WebSecurityConfigurerAdapter implements WebMvcConfigurer {
 
     @Autowired
     private JwtAuthenticationProvider authenticationProvider;
@@ -42,6 +44,12 @@ public class JwtSecurityConfig extends WebSecurityConfigurerAdapter {
 
         return filter;
     }
+
+    public void addViewControllers(ViewControllerRegistry registry) {
+        registry.addViewController("/SignUp").setViewName("SignUp");
+        registry.addViewController("/login").setViewName("login");
+    }
+
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
