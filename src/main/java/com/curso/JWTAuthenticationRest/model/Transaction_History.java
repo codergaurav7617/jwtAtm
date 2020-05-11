@@ -1,5 +1,8 @@
 package com.curso.JWTAuthenticationRest.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -10,65 +13,18 @@ import java.util.Date;
 public class Transaction_History {
     @Id
     @GeneratedValue
+    @Getter @Setter
     private int txn_id;
-
+    @Getter @Setter
     private String username;
-
+    @Getter @Setter
     private Double amount;
-
+    @Getter @Setter
     private String time_stamp;
-
+    @Getter @Setter
     private String comment;
-
+    @Getter @Setter
     private String txnType;
-
-    public void setTxnType(String txnType) {
-        this.txnType = txnType;
-    }
-
-    public int getTxn_id() {
-        return txn_id;
-    }
-
-    public void setTxn_id(int txn_id) {
-        this.txn_id = txn_id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public Double getAmount() {
-        return amount;
-    }
-
-    public void setAmount(Double amount) {
-        this.amount = amount;
-    }
-
-    public String getTime_stamp() {
-        return time_stamp;
-    }
-
-    public void setTime_stamp(String time_stamp) {
-        this.time_stamp = time_stamp;
-    }
-
-    public String getComment() {
-        return comment;
-    }
-
-    public void setComment(String comment) {
-        this.comment = comment;
-    }
-
-    public String getTxnType() {
-        return txnType;
-    }
 
     public Transaction_History(){}
 
@@ -81,15 +37,4 @@ public class Transaction_History {
         this.comment=comment;
     }
 
-    @Override
-    public String toString() {
-        return "Transaction_History{" +
-                "txn_id=" + txn_id +
-                ", username='" + username + '\'' +
-                ", amount=" + amount +
-                ", time_stamp=" + time_stamp +
-                ", comment='" + comment + '\'' +
-                ", txn_type='" + txnType + '\'' +
-                '}';
-    }
 }

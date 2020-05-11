@@ -11,16 +11,10 @@ import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.ModelAndView;
-
 import javax.servlet.http.HttpServletRequest;
-import java.util.Date;
 import java.util.List;
-
 import static com.curso.JWTAuthenticationRest.constants.Constants.WITHDRAW;
-
 import static com.curso.JWTAuthenticationRest.constants.Constants.VIEW;
-
-
 import static com.curso.JWTAuthenticationRest.constants.Constants.DEPOSIT;
 
 
@@ -97,5 +91,4 @@ public class TransactionService {
             return mv;
         }
     }
-
 }
