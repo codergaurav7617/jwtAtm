@@ -16,23 +16,20 @@ import java.util.List;
 import static com.curso.JWTAuthenticationRest.constants.Constants.WITHDRAW;
 import static com.curso.JWTAuthenticationRest.constants.Constants.VIEW;
 import static com.curso.JWTAuthenticationRest.constants.Constants.DEPOSIT;
-
-
 @Service
 public class TransactionService {
+
     @Autowired
     private AccountRepository accountRepository;
     @Autowired
     private TransactionRepository transactionRepository;
+
     public void setBalanceOfUser(String logged_in_user,String type,Double balance) throws NotHavingSufficentBalance {
-
         Account account_of_user=accountRepository.findByUsername(logged_in_user);
-
         if (account_of_user==null){
             account_of_user=new Account(logged_in_user);
             accountRepository.save(account_of_user);
         }
-
         if (type.equals(WITHDRAW)){
             if ( account_of_user.getAmount() < balance){
                 throw new NotHavingSufficentBalance("please enter the correct ammount");
@@ -53,6 +50,7 @@ public class TransactionService {
         Transaction_History th= new Transaction_History(logged_in_user,balance,comment,txn_type);
         transactionRepository.save(th);
     }
+
     public List<Transaction_History> getHistory(String username){
         return transactionRepository.findByUsername(username);
     }
@@ -91,4 +89,5 @@ public class TransactionService {
             return mv;
         }
     }
+
 }
