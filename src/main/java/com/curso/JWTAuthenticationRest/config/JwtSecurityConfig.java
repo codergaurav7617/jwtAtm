@@ -41,7 +41,6 @@ public class JwtSecurityConfig extends WebSecurityConfigurerAdapter implements W
         JwtAuthenticationTokenFilter filter = new JwtAuthenticationTokenFilter();
         filter.setAuthenticationManager(authenticationManager());
         filter.setAuthenticationSuccessHandler(new JwtSuccessHandler());
-
         return filter;
     }
 
@@ -49,14 +48,12 @@ public class JwtSecurityConfig extends WebSecurityConfigurerAdapter implements W
         registry.addViewController("/SignUp").setViewName("SignUp");
         registry.addViewController("/login").setViewName("login");
         registry.addViewController("/txn").setViewName("Transaction_Type");
-//        registry.addViewController("/history").setViewName("Transaction_History");
     }
-
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.csrf().disable()
-                .authorizeRequests().antMatchers("**/api/**","**/transaction/**")
+                .authorizeRequests().antMatchers("**/transaction/**")
                 .authenticated()
                 .and()
                 .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint)

@@ -28,8 +28,7 @@ public class Account {
         this.username=username;
     }
 
-    public void setAmount(Double amount) {
-        System.out.println(amount);
+    public void depositAmount(Double amount) {
         this.amount += amount;
     }
 }

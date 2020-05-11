@@ -48,7 +48,6 @@
 <br><br>
 <input id="showTransactionButton" type="button" th:value="show_Transaction" />
 
-
 <script>
     $('#form2')
         .ajaxForm({
@@ -59,11 +58,17 @@
             async : false,
             success : function (response) {
                 $("body").html(response);
-
             },
             error : function (response) {
-                alert("Session time out please login again");
-                window.open("http://localhost:8048/login","_self");
+                var newUrl=window.location.protocol+"//"+window.location.host;
+               var error_mess = (JSON.parse(response['responseText']).errorMessage);
+               if (error_mess == "please enter the correct ammount"){
+                   alert(error_mess);
+                   window.open(newUrl+"/txn","_self");
+               }else{
+                   alert("Session time out please login again")
+                   window.open(newUrl+"/login","_self");
+               }
             }
         });
 </script>
@@ -81,8 +86,12 @@
                 $("body").html(response);
             },
             error : function (response) {
-                alert("Session time out please login again");
-                window.open("http://localhost:8048/login","_self");
+                var newUrl=window.location.protocol+"//"+window.location.host;
+                var status_code=response.status;
+                if(status_code == 500){
+                    alert("Session time out please login again");
+                    window.open(newUrl+"/login","_self");
+                }
             }
         })
     });
@@ -101,8 +110,12 @@
                 $("body").html(response);
             },
             error : function (response) {
-                alert("Session time out please login again");
-                window.open("http://localhost:8048/login","_self");
+                var newUrl=window.location.protocol+"//"+window.location.host;
+                var status_code=response.status;
+                if(status_code == 500){
+                    alert("Session time out please login again");
+                    window.open(newUrl+"/login","_self");
+                }
             }
         })
     });

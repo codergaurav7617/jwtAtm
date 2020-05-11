@@ -26,14 +26,15 @@
             url : '/user/register', // url
             dataType : 'json',
             success : function (response) {
-                window.open("http://localhost:8048/login","_self")
+                var newUrl=window.location.protocol+"//"+window.location.host+"/login";
+                window.open(newUrl,"_self");
             },
             error : function (response) {
-                window.open("http://localhost:8048/SignUp","_self")
+                var newUrl=window.location.protocol+"//"+window.location.host+"/SignUp";
+                window.open(newUrl,"_self");
             }
         })
     ;
-    console.log("Hello");
 </script>
 
 </body>

@@ -14,7 +14,6 @@ public class ExceptionHandlerControllerAdvice {
     @ResponseStatus(value = HttpStatus.INTERNAL_SERVER_ERROR)
     public @ResponseBody ExceptionResponse handleException(final Exception exception,
                                                            final HttpServletRequest request) {
-
         ExceptionResponse error = new ExceptionResponse();
         error.setErrorMessage(exception.getMessage());
         error.callerURL(request.getRequestURI());

@@ -16,9 +16,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/token")
 public class TokenController {
-
     private JwtGenerator jwtGenerator;
-
     @Autowired
     private LoginRepository loginRepository;
 
@@ -59,5 +57,4 @@ public class TokenController {
             return null;
         }
     }
-
 }

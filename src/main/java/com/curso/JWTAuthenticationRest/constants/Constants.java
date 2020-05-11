@@ -18,8 +18,10 @@ public class Constants {
 
     public final static String VIEW="view";
 
+    
+    
     public final static String DEPOSIT="Deposit";
 
     public final static SimpleDateFormat FORMATTER = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss z");
-
+    
 }

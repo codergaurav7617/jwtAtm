@@ -1,8 +1,8 @@
 package com.curso.JWTAuthenticationRest.controller;
 
 import com.curso.JWTAuthenticationRest.model.Login;
-import com.curso.JWTAuthenticationRest.repositories.AccountRepository;
 import com.curso.JWTAuthenticationRest.repositories.LoginRepository;
+import com.curso.JWTAuthenticationRest.services.RegistrationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,9 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/user")
 public class RegistrationController {
-
     @Autowired
-    private LoginRepository loginRepository;
+    private RegistrationService registrationService;
 
     @RequestMapping("/register")
     public boolean register(
@@ -23,8 +22,7 @@ public class RegistrationController {
     ){
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         String encodedPassword = passwordEncoder.encode(password);
-           Login l=new Login(user,encodedPassword);
-           loginRepository.save(l);
-       return true;
+        registrationService.createUser(user, encodedPassword);
+        return true;
     }
 }

@@ -17,9 +17,6 @@
 <button type="submit" form="form2" value="Submit">login</button>
 <br><br>
 
-<!--<input id="submitButton" type="button" th:value="Button" />-->
-
-
 <a href="SignUp.html">Sign Up</a>
 
 <script>
@@ -29,38 +26,14 @@
             dataType : 'json',
             success : function (response) {
                 localStorage.setItem("token",response);
-                window.open("http://localhost:8048/txn","_self")
+                var newUrl=window.location.protocol+"//"+window.location.host+"/txn";
+                window.open(newUrl,"_self")
             },
             error : function (response) {
-                console.log(response);
+                alert("Invalid Credentials");
             }
         })
     ;
-    console.log("Hello");
 </script>
-
-<!--<script>-->
-<!--    $('#submitButton').on('click',function(){-->
-<!--        $.ajax({-->
-<!--            url: "/api/access_only_with_jwt",-->
-<!--            type: 'GET',-->
-<!--            contentType: 'application/json',-->
-<!--            headers: {-->
-<!--                "Authorization": "Bearer " + localStorage.getItem("token")-->
-<!--            },-->
-<!--            async: false,-->
-<!--            success : function (response) {-->
-<!--                console.log(response);-->
-<!--            },-->
-<!--            error : function (response) {-->
-<!--                var status_code=JSON.parse(response["responseText"]).status;-->
-<!--                if (status_code==500){-->
-<!--                    window.open("http://localhost:8048/login");-->
-<!--                }-->
-<!--            }-->
-<!--        })-->
-<!--    });-->
-<!--</script>-->
-
 </body>
 </html>

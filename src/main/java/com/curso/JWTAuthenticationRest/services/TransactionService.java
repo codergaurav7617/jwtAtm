@@ -21,6 +21,7 @@ public class TransactionService {
 
     @Autowired
     private AccountRepository accountRepository;
+
     @Autowired
     private TransactionRepository transactionRepository;
 
@@ -34,10 +35,10 @@ public class TransactionService {
             if ( account_of_user.getAmount() < balance){
                 throw new NotHavingSufficentBalance("please enter the correct ammount");
             }else{
-                account_of_user.setAmount(-balance);
+                account_of_user.depositAmount(-balance);
             }
         }else if (type.equals(DEPOSIT)){
-            account_of_user.setAmount(balance);
+            account_of_user.depositAmount(balance);
         }
     }
 
@@ -73,8 +74,11 @@ public class TransactionService {
     }
 
     public ModelAndView getModelView(Transaction_History tnx,String logged_in_user){
+
         ModelAndView mv=new ModelAndView();
+
         if (tnx.getTxnType().equals(Constants.VIEW)){
+
             Double amount=getBalance(logged_in_user);   // get the total balance in the logged in user account
 
             List<Transaction_History> list_of_txn=getAllTheViewTransaction(logged_in_user); //get all the view transaction
@@ -89,5 +93,4 @@ public class TransactionService {
             return mv;
         }
     }
-
 }
