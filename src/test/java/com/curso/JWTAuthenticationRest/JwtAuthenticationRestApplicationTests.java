@@ -35,6 +35,15 @@ public class JwtAuthenticationRestApplicationTests {
     }
 
     @Test
+    public void getHistoryTestWhenUserNameAreNotSame(){
+        when(transactionRepository.findByUsername("gaurav")).thenReturn(Stream
+                .of(new Transaction_History("gaurav",273.0,"loan","Deposit"),
+                        new Transaction_History("gaurav",213.0,"education","Deposit")).collect(Collectors.toList()));
+        assertEquals(
+                0,transactionService.getHistory("piyush").size());
+    }
+
+    @Test
     public void getAllTheViewTransactionTest(){
            when(transactionRepository.findByUsernameAndTxnTypeIsContaining("piyush","view")).thenReturn(Stream
                    .of(new Transaction_History("piyush",0.0,"","view"),
@@ -44,6 +53,18 @@ public class JwtAuthenticationRestApplicationTests {
         assertEquals(
                 3,transactionService.getAllTheViewTransaction("piyush").size());
     }
+
+    @Test
+    public void getAllTheViewTransactionTestWhenUserNameAreNotSame(){
+        when(transactionRepository.findByUsernameAndTxnTypeIsContaining("piyush","view")).thenReturn(Stream
+                .of(new Transaction_History("piyush",0.0,"","view"),
+                        new Transaction_History("piyush",0.0,"","view"),
+                        new Transaction_History("piyush",0.0,"","view")
+                ).collect(Collectors.toList()));
+        assertEquals(
+                0,transactionService.getAllTheViewTransaction("gaurav").size());
+    }
+
 
 
     @Test
@@ -58,6 +79,30 @@ public class JwtAuthenticationRestApplicationTests {
                 4,transactionService.getAllTheViewTransaction("piyush").size());
     }
 
+    @Test
+    public void getAllTheTransactionTestWhenUserNameAreNotSame(){
+        when(transactionRepository.findByUsernameAndTxnTypeIsNotContaining("yatharth","view")).thenReturn(Stream
+                .of(new Transaction_History("yatharth",0.0,"","view"),
+                        new Transaction_History("yatharth",172.0,"","withdraw"),
+                        new Transaction_History("yatharth",170.0,"","Deposit"),
+                        new Transaction_History("yatharth",10.0,"","Deposit")
+                ).collect(Collectors.toList()));
+        assertEquals(
+                0,transactionService.getAllTheTransaction("piyush").size());
 
+    }
+
+    @Test
+    public void getAllTheTransactionTest(){
+        when(transactionRepository.findByUsernameAndTxnTypeIsNotContaining("yatharth","view")).thenReturn(Stream
+                .of(new Transaction_History("yatharth",0.0,"","view"),
+                        new Transaction_History("yatharth",172.0,"","withdraw"),
+                        new Transaction_History("yatharth",170.0,"","Deposit"),
+                        new Transaction_History("yatharth",10.0,"","Deposit")
+                ).collect(Collectors.toList()));
+        assertEquals(
+                4,transactionService.getAllTheTransaction("yatharth").size());
+
+    }
 
 }
