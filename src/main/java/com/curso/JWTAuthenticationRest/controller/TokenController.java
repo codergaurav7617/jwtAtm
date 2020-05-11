@@ -28,7 +28,6 @@ public class TokenController {
 
     @PostMapping
     public ResponseEntity<?> generate( Login login) {
-        System.out.println(login);
         JwtUser jwtUser = new JwtUser();
 
         jwtUser = existUser(login);
