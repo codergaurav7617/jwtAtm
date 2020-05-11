@@ -3,7 +3,8 @@ package com.curso.JWTAuthenticationRest.model;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import java.text.SimpleDateFormat;
+
+import static com.curso.JWTAuthenticationRest.constants.Constants.FORMATTER;
 import java.util.Date;
 @Entity
 public class Transaction_History {
@@ -72,10 +73,10 @@ public class Transaction_History {
     public Transaction_History(){}
 
     public Transaction_History(String username,Double amount,String comment,String txn_type){
-        SimpleDateFormat formatter = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss z");
+
         this.username=username;
         this.amount=amount;
-        this.time_stamp=formatter.format(new Date());
+        this.time_stamp=FORMATTER.format(new Date());
         this.txnType=txn_type;
         this.comment=comment;
     }

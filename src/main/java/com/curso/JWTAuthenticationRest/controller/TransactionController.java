@@ -49,7 +49,6 @@ public class TransactionController {
         return mv;
     }
 
-    @ResponseBody
     @RequestMapping("/showtransaction")
     public ModelAndView showTransaction(HttpServletRequest httpServletRequest){
         String logged_in_user=transactionService.getUser(httpServletRequest); // to find the current user
