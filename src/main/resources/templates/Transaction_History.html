@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>History</title>
+    <style>
+        #historyTable {
+            border: 2px solid #CCCCCC;
+        }
+        #historyTable td, #historyTable th {
+            border: 1px solid #CCC;
+        }
+        #historyTable {
+            border: 2px solid #CCCCCC;
+            border-collapse: collapse;
+        }
+
+        #historyTable td, #historyTable th {
+            border: 1px solid #CCC;
+            padding: 10px;
+        }
+        #historyTable {
+            border: 2px solid #CCCCCC;
+            border-collapse: collapse;
+        }
+        #historyTable td:nth-of-type(1), #historyTable th:nth-of-type(1) {
+            width: 75px;
+        }
+
+        #historyTable {
+            border: 2px solid #CCCCCC;
+            border-collapse: collapse;
+            width: 1525px;
+            font-family: Cambria, Cochin, Georgia, serif;
+            font-size: 14px;
+        }
+
+        #historyTable th {
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<h2>All the previous transaction of the user:</h2>
+
+<br/><br/>
+<div>
+    <table id="historyTable">
+        <tr>
+            <th>txn_id</th>
+            <th>txn_type</th>
+            <th>amount</th>
+            <th>user_id</th>
+            <th>Comment</th>
+            <th>time_stamp</th>
+        </tr>
+        <tr th:each ="Transaction_History : ${data}">
+            <td th:text="${Transaction_History.txn_id}">...</td>
+            <td th:text="${Transaction_History.txnType}">...</td>
+            <td th:text="${Transaction_History.amount}">...</td>
+            <td th:text="${Transaction_History.username}">...</td>
+            <td th:text="${Transaction_History.comment}">...</td>
+            <td th:text="${Transaction_History.time_stamp}">...</td>
+
+        </tr>
+        </tr>
+    </table>
+</div>
+<br><br>
+<form th:action="@{/login}" method="get">
+    <input type="submit" value="Sign Out"/>
+</form>
+<br><br>
+<form th:action="@{/txn}" method="get">
+    <input type="submit" value="Home"/>
+</form>
+</body>
+
+</html>

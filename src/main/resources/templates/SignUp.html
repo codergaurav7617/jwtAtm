@@ -1,23 +1,40 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
       xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+
 <head>
     <meta charset="UTF-8">
     <title>Register</title>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.js"></script>
     <script src="http://malsup.github.com/jquery.form.js"></script>
 </head>
+
 <body>
-<form  method="post" th:action="@{/atm/register}"id="form2" >
+
+<form  method="post" id="form2" >
     <label for="exp">Enter the Name:</label><br>
-    <input type="text" id="exp" name="name"><br><br>
-    <label for="id">Enter the user id:</label><br>
-    <input type="text" id="id" name="id"><br><br>
+    <input type="text" id="exp" name="user"><br><br>
     <label for="pass">Enter the password:</label><br>
-    <input type="text" id="pass" name="password"><br><br>
+    <input type="password" id="pass" name="password"><br><br>
 </form>
 
 <button type="submit" form="form2" value="Submit">Ok</button>
+
+<script>
+    $('#form2')
+        .ajaxForm({
+            url : '/user/register', // url
+            dataType : 'json',
+            success : function (response) {
+                window.open("http://localhost:8048/login","_self")
+            },
+            error : function (response) {
+                window.open("http://localhost:8048/SignUp","_self")
+            }
+        })
+    ;
+    console.log("Hello");
+</script>
 
 </body>
 </html>

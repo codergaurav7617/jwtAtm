@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,8 +15,11 @@ import java.util.List;
 public class SecurityController {
 
     @GetMapping("/access_only_with_jwt")
-    public ResponseEntity<?> getBankInformation() {
+    public ResponseEntity<?> getBankInformation(HttpServletRequest httpServletRequest) {
+        System.out.println(httpServletRequest);
+        System.out.println(httpServletRequest.getHeader("Authorization"));
         List<String> bankingTransactions = getBankingTransactions();
+        System.out.println(httpServletRequest.getRemoteUser());
 
         if(bankingTransactions.size() != 0) {
             return new ResponseEntity<>(bankingTransactions, HttpStatus.OK);

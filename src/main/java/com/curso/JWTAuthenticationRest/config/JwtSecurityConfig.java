@@ -48,13 +48,15 @@ public class JwtSecurityConfig extends WebSecurityConfigurerAdapter implements W
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/SignUp").setViewName("SignUp");
         registry.addViewController("/login").setViewName("login");
+        registry.addViewController("/txn").setViewName("Transaction_Type");
+//        registry.addViewController("/history").setViewName("Transaction_History");
     }
 
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.csrf().disable()
-                .authorizeRequests().antMatchers("**/api/**")
+                .authorizeRequests().antMatchers("**/api/**","**/transaction/**")
                 .authenticated()
                 .and()
                 .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint)

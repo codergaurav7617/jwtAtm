@@ -12,4 +12,10 @@ public class Constants {
 
     public final static String BEARER_TOKEN = "Bearer ";
 
+    public final static String WITHDRAW="withdraw";
+
+    public final static String VIEW="view";
+
+    public final static String DEPOSIT="Deposit";
+
 }

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Home_Screen</title>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.js"></script>
+    <script src="http://malsup.github.com/jquery.form.js"></script>
+
+    <script type="text/javascript">
+        function EnableDisableTextBox() {
+            document.getElementById('amount').removeAttribute('disabled');
+            document.getElementById('comment').removeAttribute('disabled');
+        }
+    </script>
+</head>
+<body>
+
+<form  method="post"  id="form2" >
+
+    <input type="radio" id="view" name="txnType" value="view">
+
+    <label for="view">View</label><br>
+
+    <input type="radio" id="withdraw" name="txnType" value="withdraw" onclick="EnableDisableTextBox()">
+
+    <label for="withdraw">Withdraw</label><br>
+
+    <input type="radio" id="deposit" name="txnType" value="Deposit" onclick="EnableDisableTextBox()">
+
+    <label for="deposit">Deposit</label><br>
+
+    <br>
+
+    <label for="amount">Enter the Amount:</label><br>
+
+    <input type="text" id="amount" name="amount" disabled><br>
+
+    <label for="comment">Comment:</label><br>
+
+    <input type="text" id="comment" name="comment" disabled><br><br>
+</form>
+<button type="submit" form="form2" value="Ok">Ok</button>
+
+
+<br><br>
+<input id="historyButton" type="button" th:value="History" />
+
+<br><br>
+<input id="showTransactionButton" type="button" th:value="show_Transaction" />
+
+
+<script>
+    $('#form2')
+        .ajaxForm({
+            url : '/transaction/type', // url
+            headers: {
+                "Authorization": "Bearer " + localStorage.getItem("token")
+            },
+            async : false,
+            success : function (response) {
+                $("body").html(response);
+
+            },
+            error : function (response) {
+                alert("Session time out please login again");
+                window.open("http://localhost:8048/login","_self");
+            }
+        });
+</script>
+
+<script>
+    $('#historyButton').on('click',function(){
+        $.ajax({
+            url: "/transaction/history",
+            type: 'GET',
+            headers: {
+                "Authorization": "Bearer " + localStorage.getItem("token")
+            },
+            async: false,
+            success : function (response) {
+                $("body").html(response);
+            },
+            error : function (response) {
+                alert("Session time out please login again");
+                window.open("http://localhost:8048/login","_self");
+            }
+        })
+    });
+</script>
+
+<script>
+    $('#showTransactionButton').on('click',function(){
+        $.ajax({
+            url: "/transaction/showtransaction",
+            type: 'GET',
+            headers: {
+                "Authorization": "Bearer " + localStorage.getItem("token")
+            },
+            async: false,
+            success : function (response) {
+                $("body").html(response);
+            },
+            error : function (response) {
+                alert("Session time out please login again");
+                window.open("http://localhost:8048/login","_self");
+            }
+        })
+    });
+</script>
+
+</body>
+</html>
