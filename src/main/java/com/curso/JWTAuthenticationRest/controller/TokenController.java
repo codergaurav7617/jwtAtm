@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import static com.curso.JWTAuthenticationRest.constants.Constants.ADMIN;
+import static com.curso.JWTAuthenticationRest.constants.Constants.ID;
 
 @RestController
 @RequestMapping("/token")
@@ -45,16 +47,18 @@ public class TokenController {
         Login l=loginRepository.findByUser(login.getUser());
         // for password matching
         BCryptPasswordEncoder passwordEncoder=new BCryptPasswordEncoder();
+
         boolean isPasswordMatches=passwordEncoder.matches(login.getPassword(), l.getPassword());
 
         if(login.getUser().equals(l.getUser()) && isPasswordMatches) {
             JwtUser jwtUser = new JwtUser();
             jwtUser.setUsername(login.getUser());
-            jwtUser.setId(1);
-            jwtUser.setRole("Admin");
+            jwtUser.setId(ID);
+            jwtUser.setRole(ADMIN);
             return jwtUser;
         }else  {
             return null;
         }
     }
+
 }

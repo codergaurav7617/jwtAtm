@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import static com.curso.JWTAuthenticationRest.constants.Constants.TransactionHistory;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 @RestController
@@ -42,22 +43,16 @@ public class TransactionController {
         // get all the transaction of the particular user
         List<Transaction_History> list_of_txn=transactionService.getHistory(logged_in_user);
 
-        // holder for model and view
-        ModelAndView mv=new ModelAndView();
-        mv.setViewName("Transaction_History");
-        mv.addObject("data",list_of_txn);
-        return mv;
+        return transactionService.getView(TransactionHistory,list_of_txn);
     }
 
     @RequestMapping("/showtransaction")
     public ModelAndView showTransaction(HttpServletRequest httpServletRequest){
+
         String logged_in_user=transactionService.getUser(httpServletRequest); // to find the current user
 
         List<Transaction_History> list_of_txn=transactionService.getAllTheTransaction(logged_in_user); // get all the txn
 
-        ModelAndView mv=new ModelAndView(); // holder for model and view
-        mv.setViewName("Transaction_History");
-        mv.addObject("data",list_of_txn);
-        return mv;
+        return transactionService.getView(TransactionHistory,list_of_txn);
     }
 }

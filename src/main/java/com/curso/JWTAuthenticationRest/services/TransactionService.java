@@ -11,11 +11,13 @@ import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.ModelAndView;
+
+
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
-import static com.curso.JWTAuthenticationRest.constants.Constants.WITHDRAW;
-import static com.curso.JWTAuthenticationRest.constants.Constants.VIEW;
-import static com.curso.JWTAuthenticationRest.constants.Constants.DEPOSIT;
+
+import static com.curso.JWTAuthenticationRest.constants.Constants.*;
+
 @Service
 public class TransactionService {
 
@@ -33,7 +35,7 @@ public class TransactionService {
         }
         if (type.equals(WITHDRAW)){
             if ( account_of_user.getAmount() < balance){
-                throw new NotHavingSufficentBalance("please enter the correct ammount");
+                throw new NotHavingSufficentBalance(BALANCEMESSAGE);
             }else{
                 account_of_user.depositAmount(-balance);
             }
@@ -65,7 +67,7 @@ public class TransactionService {
     }
 
     public String getUser(HttpServletRequest httpServletRequest){
-        String token=(httpServletRequest.getHeader("Authorization")).substring(7);
+        String token=(httpServletRequest.getHeader(AUTHORIZATION_HEADER)).substring(7);
         Claims body = Jwts.parser()
                 .setSigningKey(Constants.YOUR_SECRET)
                 .parseClaimsJws(token)
@@ -83,14 +85,21 @@ public class TransactionService {
 
             List<Transaction_History> list_of_txn=getAllTheViewTransaction(logged_in_user); //get all the view transaction
 
-            mv.setViewName("balance");
-            mv.addObject("val",amount);
-            mv.addObject("data",list_of_txn);
+            mv.setViewName(BALANCE);
+            mv.addObject(VAL,amount);
+            mv.addObject(DATA,list_of_txn);
 
             return mv;
         }else{
-            mv.setViewName("sucess");
+            mv.setViewName(SUCESS);
             return mv;
         }
+    }
+
+    public ModelAndView getView(String viewName,List<Transaction_History> list_of_txn){
+        ModelAndView mv=new ModelAndView();
+        mv.setViewName(viewName);
+        mv.addObject(DATA, list_of_txn);
+        return mv;
     }
 }
