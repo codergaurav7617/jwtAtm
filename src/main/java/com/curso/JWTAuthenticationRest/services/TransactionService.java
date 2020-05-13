@@ -6,43 +6,24 @@ import com.curso.JWTAuthenticationRest.model.Account;
 import com.curso.JWTAuthenticationRest.model.Transaction_History;
 import com.curso.JWTAuthenticationRest.repositories.AccountRepository;
 import com.curso.JWTAuthenticationRest.repositories.TransactionRepository;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.ModelAndView;
-
-
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
-
 import static com.curso.JWTAuthenticationRest.constants.Constants.*;
 
 @Service
 public class TransactionService {
 
-    @Autowired
-    private AccountRepository accountRepository;
+    private final AccountRepository accountRepository;
+
+    private final TransactionRepository transactionRepository;
 
     @Autowired
-    private TransactionRepository transactionRepository;
+    public TransactionService(AccountRepository accountRepository, TransactionRepository transactionRepository) {
 
-    public void setBalanceOfUser(String logged_in_user,String type,Double balance) throws NotHavingSufficentBalance {
-        Account account_of_user=accountRepository.findByUsername(logged_in_user);
-        if (account_of_user==null){
-            account_of_user=new Account(logged_in_user);
-            accountRepository.save(account_of_user);
-        }
-        if (type.equals(WITHDRAW)){
-            if ( account_of_user.getAmount() < balance){
-                throw new NotHavingSufficentBalance(BALANCEMESSAGE);
-            }else{
-                account_of_user.depositAmount(-balance);
-            }
-        }else if (type.equals(DEPOSIT)){
-            account_of_user.depositAmount(balance);
-        }
+        this.accountRepository = accountRepository;
+        this.transactionRepository = transactionRepository;
     }
 
     public Double getBalance(String username){
@@ -67,9 +48,13 @@ public class TransactionService {
         return transactionRepository.findByUsernameAndTxnTypeIsContaining(username, VIEW);
     }
 
-    public ModelAndView getModelView(Transaction_History tnx,String logged_in_user){
-
+    public ModelAndView getView(String viewName){
         ModelAndView mv=new ModelAndView();
+        mv.setViewName(viewName);
+        return mv;
+    }
+
+    public ModelAndView getModelView(Transaction_History tnx,String logged_in_user){
 
         if (tnx.getTxnType().equals(Constants.VIEW)){
 
@@ -77,21 +62,30 @@ public class TransactionService {
 
             List<Transaction_History> list_of_txn=getAllTheViewTransaction(logged_in_user); //get all the view transaction
 
-            mv.setViewName(BALANCE);
+            ModelAndView mv=getView(BALANCE);
             mv.addObject(VAL,amount);
             mv.addObject(DATA,list_of_txn);
 
             return mv;
         }else{
-            mv.setViewName(SUCESS);
-            return mv;
+            return getView(SUCESS);
         }
     }
 
-    public ModelAndView getView(String viewName,List<Transaction_History> list_of_txn){
-        ModelAndView mv=new ModelAndView();
-        mv.setViewName(viewName);
-        mv.addObject(DATA, list_of_txn);
-        return mv;
+    public void setBalanceOfUser(String logged_in_user,String type,Double balance) throws NotHavingSufficentBalance {
+        Account account_of_user=accountRepository.findByUsername(logged_in_user);
+        if (account_of_user==null){
+            account_of_user=new Account(logged_in_user);
+            accountRepository.save(account_of_user);
+        }
+        if (type.equals(WITHDRAW)){
+            if ( account_of_user.getAmount() < balance){
+                throw new NotHavingSufficentBalance(BALANCEMESSAGE);
+            }else{
+                account_of_user.depositAmount(-balance);
+            }
+        }else if (type.equals(DEPOSIT)){
+            account_of_user.depositAmount(balance);
+        }
     }
 }

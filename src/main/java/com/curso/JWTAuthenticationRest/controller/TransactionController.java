@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import static com.curso.JWTAuthenticationRest.constants.Constants.DATA;
 import static com.curso.JWTAuthenticationRest.constants.Constants.TransactionHistory;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -44,7 +45,9 @@ public class TransactionController {
         // get all the transaction of the particular user
         List<Transaction_History> list_of_txn=transactionService.getHistory(logged_in_user);
 
-        return transactionService.getView(TransactionHistory,list_of_txn);
+        ModelAndView mv= transactionService.getView(TransactionHistory);
+        mv.addObject(DATA, list_of_txn);
+        return mv;
     }
 
     @RequestMapping("/showtransaction")
@@ -54,6 +57,8 @@ public class TransactionController {
 
         List<Transaction_History> list_of_txn=transactionService.getAllTheTransaction(logged_in_user); // get all the txn
 
-        return transactionService.getView(TransactionHistory,list_of_txn);
+        ModelAndView mv= transactionService.getView(TransactionHistory);
+        mv.addObject(DATA, list_of_txn);
+        return mv;
     }
 }

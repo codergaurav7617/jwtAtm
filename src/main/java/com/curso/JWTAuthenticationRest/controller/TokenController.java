@@ -17,14 +17,11 @@ import static com.curso.JWTAuthenticationRest.constants.Constants.*;
 @RequestMapping("/token")
 public class TokenController {
     private JwtGenerator jwtGenerator;
-
     @Autowired
     private LoginService loginService;
-
     public TokenController(JwtGenerator jwtGenerator) {
         this.jwtGenerator = jwtGenerator;
     }
-
     @PostMapping
     public ResponseEntity<?> generate(Login login,HttpServletResponse response) {
         JwtUser jwtUser = new JwtUser();
@@ -38,5 +35,4 @@ public class TokenController {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
     }
-
 }

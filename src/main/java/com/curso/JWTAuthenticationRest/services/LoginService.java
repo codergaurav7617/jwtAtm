@@ -17,7 +17,6 @@ public class LoginService {
      @Autowired
     private LoginRepository loginRepository;
 
-
     public JwtUser existUser(Login login) {
         // for finding out the user from the db on the basis of user name
         Login l=loginRepository.findByUser(login.getUser());

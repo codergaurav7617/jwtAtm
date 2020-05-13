@@ -1,29 +1,42 @@
 package com.curso.JWTAuthenticationRest;
 
+import com.curso.JWTAuthenticationRest.exception.NotHavingSufficentBalance;
+import com.curso.JWTAuthenticationRest.model.Account;
 import com.curso.JWTAuthenticationRest.model.Transaction_History;
+import com.curso.JWTAuthenticationRest.repositories.AccountRepository;
 import com.curso.JWTAuthenticationRest.repositories.TransactionRepository;
 import com.curso.JWTAuthenticationRest.services.TransactionService;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.junit4.SpringRunner;
-
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
+@RunWith(MockitoJUnitRunner.class)
+public class TransactionServiceTest {
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
-public class JwtAuthenticationRestApplicationTests {
-    @Autowired
     private TransactionService transactionService;
 
-    @MockBean
+    @Mock
+    private AccountRepository accountRepository;
+
+    @Mock
     private TransactionRepository transactionRepository;
+
+    @Before
+    public void setup() {
+
+        transactionService =  new TransactionService(accountRepository, transactionRepository);
+    }
+    @After
+    public void tearDown() {
+        verifyNoMoreInteractions(transactionRepository, accountRepository);
+    }
 
     @Test
     public void getHistoryTest(){
@@ -32,6 +45,7 @@ public class JwtAuthenticationRestApplicationTests {
                         new Transaction_History("gaurav",213.0,"education","Deposit")).collect(Collectors.toList()));
           assertEquals(
                   2,transactionService.getHistory("gaurav").size());
+          verify(transactionRepository).findByUsername("gaurav");
     }
 
     @Test
@@ -40,7 +54,8 @@ public class JwtAuthenticationRestApplicationTests {
                 .of(new Transaction_History("gaurav",273.0,"loan","Deposit"),
                         new Transaction_History("gaurav",213.0,"education","Deposit")).collect(Collectors.toList()));
         assertEquals(
-                0,transactionService.getHistory("piyush").size());
+                2,transactionService.getHistory("gaurav").size());
+        verify(transactionRepository).findByUsername("gaurav");
     }
 
     @Test
@@ -52,6 +67,7 @@ public class JwtAuthenticationRestApplicationTests {
                            ).collect(Collectors.toList()));
         assertEquals(
                 3,transactionService.getAllTheViewTransaction("piyush").size());
+        verify(transactionRepository).findByUsernameAndTxnTypeIsContaining("piyush", "view");
     }
 
     @Test
@@ -62,10 +78,9 @@ public class JwtAuthenticationRestApplicationTests {
                         new Transaction_History("piyush",0.0,"","view")
                 ).collect(Collectors.toList()));
         assertEquals(
-                0,transactionService.getAllTheViewTransaction("gaurav").size());
+                3,transactionService.getAllTheViewTransaction("piyush").size());
+        verify(transactionRepository).findByUsernameAndTxnTypeIsContaining("piyush", "view");
     }
-
-
 
     @Test
     public void getAllTheViewTransactionTestHavingSomeMixedTypeOfTransaction(){
@@ -77,19 +92,7 @@ public class JwtAuthenticationRestApplicationTests {
                 ).collect(Collectors.toList()));
         assertEquals(
                 4,transactionService.getAllTheViewTransaction("piyush").size());
-    }
-
-    @Test
-    public void getAllTheTransactionTestWhenUserNameAreNotSame(){
-        when(transactionRepository.findByUsernameAndTxnTypeIsNotContaining("yatharth","view")).thenReturn(Stream
-                .of(new Transaction_History("yatharth",0.0,"","view"),
-                        new Transaction_History("yatharth",172.0,"","withdraw"),
-                        new Transaction_History("yatharth",170.0,"","Deposit"),
-                        new Transaction_History("yatharth",10.0,"","Deposit")
-                ).collect(Collectors.toList()));
-        assertEquals(
-                0,transactionService.getAllTheTransaction("piyush").size());
-
+               verify(transactionRepository).findByUsernameAndTxnTypeIsContaining("piyush", "view");
     }
 
     @Test
@@ -102,6 +105,13 @@ public class JwtAuthenticationRestApplicationTests {
                 ).collect(Collectors.toList()));
         assertEquals(
                 4,transactionService.getAllTheTransaction("yatharth").size());
+        verify(transactionRepository).findByUsernameAndTxnTypeIsNotContaining("yatharth", "view");
     }
 
+    @Test
+    public void test() throws NotHavingSufficentBalance {
+        when(accountRepository.findByUsername("yatharth")).thenReturn(new Account("yatharth"));
+        transactionService.setBalanceOfUser("yatharth","Deposit" ,273.00 );
+        verify(accountRepository).findByUsername("yatharth");
+    }
 }
