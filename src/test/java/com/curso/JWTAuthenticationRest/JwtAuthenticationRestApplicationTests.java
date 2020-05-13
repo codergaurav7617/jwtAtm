@@ -102,7 +102,6 @@ public class JwtAuthenticationRestApplicationTests {
                 ).collect(Collectors.toList()));
         assertEquals(
                 4,transactionService.getAllTheTransaction("yatharth").size());
-
     }
 
 }

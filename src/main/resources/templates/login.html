@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-
 <head>
     <title>Login</title>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.js"></script>
@@ -25,7 +24,7 @@
             url : '/token', // url
             dataType : 'json',
             success : function (response) {
-                localStorage.setItem("token",response);
+                console.log(response);
                 var newUrl=window.location.protocol+"//"+window.location.host+"/txn";
                 window.open(newUrl,"_self")
             },

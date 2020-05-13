@@ -52,9 +52,6 @@
     $('#form2')
         .ajaxForm({
             url : '/transaction/type', // url
-            headers: {
-                "Authorization": "Bearer " + localStorage.getItem("token")
-            },
             async : false,
             success : function (response) {
                 $("body").html(response);
@@ -78,9 +75,6 @@
         $.ajax({
             url: "/transaction/history",
             type: 'GET',
-            headers: {
-                "Authorization": "Bearer " + localStorage.getItem("token")
-            },
             async: false,
             success : function (response) {
                 $("body").html(response);
@@ -102,9 +96,6 @@
         $.ajax({
             url: "/transaction/showtransaction",
             type: 'GET',
-            headers: {
-                "Authorization": "Bearer " + localStorage.getItem("token")
-            },
             async: false,
             success : function (response) {
                 $("body").html(response);

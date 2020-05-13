@@ -37,4 +37,15 @@ public class Transaction_History {
         this.comment=comment;
     }
 
+    @Override
+    public String toString() {
+        return "Transaction_History{" +
+                "txn_id=" + txn_id +
+                ", username='" + username + '\'' +
+                ", amount=" + amount +
+                ", time_stamp='" + time_stamp + '\'' +
+                ", comment='" + comment + '\'' +
+                ", txnType='" + txnType + '\'' +
+                '}';
+    }
 }

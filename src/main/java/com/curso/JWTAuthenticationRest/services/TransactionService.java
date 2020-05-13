@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.ModelAndView;
 
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
@@ -64,15 +65,6 @@ public class TransactionService {
 
     public List<Transaction_History> getAllTheViewTransaction(String username){
         return transactionRepository.findByUsernameAndTxnTypeIsContaining(username, VIEW);
-    }
-
-    public String getUser(HttpServletRequest httpServletRequest){
-        String token=(httpServletRequest.getHeader(AUTHORIZATION_HEADER)).substring(7);
-        Claims body = Jwts.parser()
-                .setSigningKey(Constants.YOUR_SECRET)
-                .parseClaimsJws(token)
-                .getBody();
-        return body.getSubject();
     }
 
     public ModelAndView getModelView(Transaction_History tnx,String logged_in_user){

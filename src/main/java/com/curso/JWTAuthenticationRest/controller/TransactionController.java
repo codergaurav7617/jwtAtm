@@ -23,7 +23,8 @@ public class TransactionController {
             HttpServletRequest httpServletRequest,
              Transaction_History tnx
     ) throws NotHavingSufficentBalance {
-        String logged_in_user=transactionService.getUser(httpServletRequest);    // to find out the current user
+
+        String logged_in_user=httpServletRequest.getRemoteUser();    // to find out the current user
 
         transactionService.setBalanceOfUser(logged_in_user, tnx.getTxnType(),tnx.getAmount());  // get the account of current user
 
@@ -38,7 +39,7 @@ public class TransactionController {
     public ModelAndView history(HttpServletRequest httpServletRequest){
 
         // to find the current user
-        String logged_in_user=transactionService.getUser(httpServletRequest);
+        String logged_in_user=httpServletRequest.getRemoteUser();
 
         // get all the transaction of the particular user
         List<Transaction_History> list_of_txn=transactionService.getHistory(logged_in_user);
@@ -49,7 +50,7 @@ public class TransactionController {
     @RequestMapping("/showtransaction")
     public ModelAndView showTransaction(HttpServletRequest httpServletRequest){
 
-        String logged_in_user=transactionService.getUser(httpServletRequest); // to find the current user
+        String logged_in_user=httpServletRequest.getRemoteUser(); // to find the current user
 
         List<Transaction_History> list_of_txn=transactionService.getAllTheTransaction(logged_in_user); // get all the txn
 

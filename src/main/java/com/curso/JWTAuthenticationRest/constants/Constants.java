@@ -40,4 +40,5 @@ public class Constants {
 
     public final static String BALANCEMESSAGE="please enter the correct ammount";
 
+    public final static String TOKEN ="token";
 }
