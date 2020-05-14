@@ -1,59 +1,22 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 
-<html lang="en">
+<!--<html lang="en">-->
+
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
 <head>
     <meta charset="UTF-8">
     <title>History</title>
-    <style>
-        #historyTable {
-            border: 2px solid #CCCCCC;
-        }
-        #historyTable td, #historyTable th {
-            border: 1px solid #CCC;
-        }
-        #historyTable {
-            border: 2px solid #CCCCCC;
-            border-collapse: collapse;
-        }
-
-        #historyTable td, #historyTable th {
-            border: 1px solid #CCC;
-            padding: 10px;
-        }
-        #historyTable {
-            border: 2px solid #CCCCCC;
-            border-collapse: collapse;
-        }
-        #historyTable td:nth-of-type(1), #historyTable th:nth-of-type(1) {
-            width: 75px;
-        }
-
-        #historyTable {
-            border: 2px solid #CCCCCC;
-            border-collapse: collapse;
-            width: 1525px;
-            font-family: Cambria, Cochin, Georgia, serif;
-            font-size: 14px;
-        }
-
-        #historyTable th {
-            font-weight: bold;
-            font-size: 16px;
-        }
-
-    </style>
-
 </head>
-
 <body>
-
-<h2>All the previous transaction of the user:</h2>
-
-<br/><br/>
+<h2 align="center">All the previous transaction of the user:</h2>
+<br/>
 <div>
-    <table id="historyTable">
+    <table class="table table-bordered table-dark">
+        <thead>
         <tr>
             <th>txn_id</th>
             <th>txn_type</th>
@@ -62,6 +25,7 @@
             <th>Comment</th>
             <th>time_stamp</th>
         </tr>
+        </thead>
         <tr th:each ="Transaction_History : ${data}">
             <td th:text="${Transaction_History.txn_id}">...</td>
             <td th:text="${Transaction_History.txnType}">...</td>
@@ -74,14 +38,15 @@
         </tr>
     </table>
 </div>
+
 <br><br>
-<form th:action="@{/login}" method="get">
-    <input type="submit" value="Sign Out"/>
+
+<form th:action="@{/login}" method="get" th:align="center">
+    <input type="submit" class="btn btn-secondary" value="Sign Out"/>
+    <br><br>
 </form>
-<br><br>
-<form th:action="@{/txn}" method="get">
-    <input type="submit" value="Home"/>
+<form th:action="@{/txn}" method="get" th:align="center">
+    <input class="btn btn-secondary" type="submit" value="Home"/>
 </form>
 </body>
-
 </html>

@@ -12,41 +12,90 @@
             document.getElementById('comment').removeAttribute('disabled');
         }
     </script>
+
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.js"></script>
+    <script src="http://malsup.github.com/jquery.form.js"></script>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #17a2b8;
+            height: 100vh;
+        }
+        #login .container #login-row #login-column #login-box {
+            margin-top: 120px;
+            max-width: 600px;
+            height: 420px;
+            border: 1px solid #9C9C9C;
+            background-color: #EAEAEA;
+        }
+        #login .container #login-row #login-column #login-box #login-form {
+            padding: 20px;
+        }
+        #login .container #login-row #login-column #login-box #form2 #register-link {
+            margin-top: -85px;
+        }
+        .form-group-button {
+            margin-left: 60px;
+            display: inline-block;
+        }
+    </style>
+
 </head>
+
+
 <body>
+<div id="login">
+    <h3 class="text-center text-white pt-5">Transaction Type</h3>
+    <div class="container">
+        <div id="login-row" class="row justify-content-center align-items-center">
+            <div id="login-column" class="col-md-6">
+                <div id="login-box" class="col-md-12">
+                    <form id="form2" class="form" method="post" >
+                        <h3 class="text-center text-info">Transaction</h3>
+                        <div class="form-group">
+                            <input type="radio" id="view" name="txnType" value="view">
 
-<form  method="post"  id="form2" >
+                            <label for="view">View</label><br>
 
-    <input type="radio" id="view" name="txnType" value="view">
+                            <input type="radio" id="withdraw" name="txnType" value="withdraw" onclick="EnableDisableTextBox()">
 
-    <label for="view">View</label><br>
+                            <label for="withdraw">Withdraw</label><br>
 
-    <input type="radio" id="withdraw" name="txnType" value="withdraw" onclick="EnableDisableTextBox()">
+                            <input type="radio" id="deposit" name="txnType" value="Deposit" onclick="EnableDisableTextBox()">
 
-    <label for="withdraw">Withdraw</label><br>
-
-    <input type="radio" id="deposit" name="txnType" value="Deposit" onclick="EnableDisableTextBox()">
-
-    <label for="deposit">Deposit</label><br>
-
-    <br>
-
-    <label for="amount">Enter the Amount:</label><br>
-
-    <input type="text" id="amount" name="amount" disabled><br>
-
-    <label for="comment">Comment:</label><br>
-
-    <input type="text" id="comment" name="comment" disabled><br><br>
-</form>
-<button type="submit" form="form2" value="Ok">Ok</button>
-
-
-<br><br>
-<input id="historyButton" type="button" th:value="History" />
-
-<br><br>
-<input id="showTransactionButton" type="button" th:value="Transaction" />
+                            <label for="deposit">Deposit</label><br>
+                        </div>
+                        <div class="form-group">
+                            <label for="amount" class="text-info">Amount:</label><br>
+                            <input type="text" name="amount" id="amount" class="form-control" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label for="comment" class="text-info">Comment:</label><br>
+                            <input type="text" name="comment" id="comment" class="form-control" disabled>
+                        </div>
+                        <div class="form-group-button" th:align="center">
+                            <input type="submit"  id="historyButton" name="History" class="btn btn-info btn-md" value="History" >
+                        </div>
+                        <div class="form-group-button" th:align="center">
+                            <input type="submit"  form="form2" name="submit" class="btn btn-info btn-md" value="submit">
+                        </div>
+                        <div class="form-group-button" th:align="center">
+                            <input type="submit"   id="showTransactionButton" name="Transaction" class="btn btn-info btn-md" value="Transaction">
+                        </div>
+                        <br>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script>
     $('#form2')

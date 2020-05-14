@@ -4,17 +4,20 @@ import com.curso.JWTAuthenticationRest.model.JwtUser;
 import com.curso.JWTAuthenticationRest.model.Login;
 import com.curso.JWTAuthenticationRest.repositories.LoginRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import javax.servlet.http.Cookie;
-
 import static com.curso.JWTAuthenticationRest.constants.Constants.ADMIN;
 import static com.curso.JWTAuthenticationRest.constants.Constants.ID;
 
 @Service
 public class LoginService {
-     @Autowired
+
+    @Value("${cookieExpiration}")
+        private int cookieExpiration;
+
+    @Autowired
     private LoginRepository loginRepository;
 
     public JwtUser existUser(Login login) {
@@ -42,7 +45,7 @@ public class LoginService {
         // for creation of cookies storing in the browser and it is send in the every request(small piece of info store in the browser).
         Cookie cookie = new Cookie(name,value);
         cookie.setHttpOnly(true);
-        cookie.setMaxAge(-40);
+        cookie.setMaxAge(-cookieExpiration);
         cookie.setPath("/");
         return cookie;
     }

@@ -5,20 +5,70 @@
 <head>
     <meta charset="UTF-8">
     <title>Register</title>
+
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.js"></script>
     <script src="http://malsup.github.com/jquery.form.js"></script>
+
+    <style>
+        body {
+            /*background-image: url('http://getwallpapers.com/wallpaper/full/a/5/d/544750.jpg');*/
+            margin: 0;
+            padding: 0;
+            background-color: #17a2b8;
+            height: 100vh;
+        }
+        #login .container #login-row #login-column #login-box {
+            margin-top: 120px;
+            max-width: 600px;
+            height: 320px;
+            border: 1px solid #9C9C9C;
+            background-color: #EAEAEA;
+        }
+        #login .container #login-row #login-column #login-box #login-form {
+            padding: 20px;
+        }
+        #login .container #login-row #login-column #login-box #form2 #register-link {
+            margin-top: -85px;
+        }
+    </style>
+
 </head>
 
 <body>
-
-<form  method="post" id="form2" >
-    <label for="exp">Enter the Name:</label><br>
-    <input type="text" id="exp" name="user"><br><br>
-    <label for="pass">Enter the password:</label><br>
-    <input type="password" id="pass" name="password"><br><br>
-</form>
-
-<button type="submit" form="form2" value="Submit">Ok</button>
+<div id="login">
+    <h3 class="text-center text-white pt-5">Registration form</h3>
+    <div class="container">
+        <div id="login-row" class="row justify-content-center align-items-center">
+            <div id="login-column" class="col-md-6">
+                <div id="login-box" class="col-md-12">
+                    <form id="form2" class="form" method="post" >
+                        <h3 class="text-center text-info">Register</h3>
+                        <div class="form-group">
+                            <label for="username" class="text-info">Username:</label><br>
+                            <input type="text" name="user" id="username" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="password" class="text-info">Password:</label><br>
+                            <input type="password" name="password" id="password" class="form-control">
+                        </div>
+                        <div class="form-group" th:align="center">
+                            <input type="submit"  form="form2" name="submit" class="btn btn-info btn-md" value="submit">
+                        </div>
+                        <br>
+                        <div id="register-link" class="text-right">
+                            <a href="/login" class="text-info">Login here</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script>
     $('#form2')
@@ -37,7 +87,5 @@
         })
     ;
 </script>
-
 </body>
-
 </html>

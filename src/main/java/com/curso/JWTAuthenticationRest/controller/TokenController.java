@@ -24,6 +24,8 @@ public class TokenController {
     }
     @PostMapping
     public ResponseEntity<?> generate(Login login,HttpServletResponse response) {
+        System.out.println(login);
+        System.out.println(login.getUser()+" "+login.getPassword());
         JwtUser jwtUser = new JwtUser();
         jwtUser = loginService.existUser(login);
         if(jwtUser != null) {

@@ -3,17 +3,35 @@
       xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head>
     <title>Transaction Sucessful</title>
+
+    <style>
+        body{
+            background-color: aliceblue;
+        }
+        #form1 #form2{
+            margin-top: 100px;
+            margin-left: 60px;
+            display: inline-flex;
+        }
+
+    </style>
+
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
 </head>
+
 <body>
-<h1 th:inline="text">Hello [[${#httpServletRequest.remoteUser}]] Transaction Sucessful!</h1>
-<form th:action="@{/logout}" method="get">
-    <input type="submit" value="Sign Out"/>
+<h1 th:inline="text" th:align="center">Hello [[${#httpServletRequest.remoteUser}]] Transaction Sucessful!</h1>
+<form id="form1" th:action="@{/logout}" method="get" th:align="center">
+    <input type="submit" class="btn btn-secondary" value="Sign Out"/>
 </form>
 
 <br><br>
 
-<form th:action="@{/txn}" method="get">
-    <input type="submit" value="Home"/>
+<form id="form2" th:action="@{/txn}" method="get" th:align="center">
+    <input type="submit" class="btn btn-secondary" value="Home"/>
 </form>
 
 </body>
