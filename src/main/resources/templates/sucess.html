@@ -21,18 +21,15 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
 </head>
-
+<!--[[${#httpServletRequest.remoteUser}]]-->
 <body>
-<h1 th:inline="text" th:align="center">Hello [[${#httpServletRequest.remoteUser}]] Transaction Sucessful!</h1>
+<h1 th:inline="text" th:align="center">Hello  Transaction Sucessful!</h1>
 <form id="form1" th:action="@{/logout}" method="get" th:align="center">
     <input type="submit" class="btn btn-secondary" value="Sign Out"/>
 </form>
-
 <br><br>
-
 <form id="form2" th:action="@{/txn}" method="get" th:align="center">
     <input type="submit" class="btn btn-secondary" value="Home"/>
 </form>
-
 </body>
 </html>

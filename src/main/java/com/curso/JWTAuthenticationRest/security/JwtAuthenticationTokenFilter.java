@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+import static com.curso.JWTAuthenticationRest.constants.Constants.AUTHORIZATION_HEADER;
 import static com.curso.JWTAuthenticationRest.constants.Constants.BEARER_TOKEN;
 
 public class JwtAuthenticationTokenFilter extends AbstractAuthenticationProcessingFilter {
@@ -26,28 +27,28 @@ public class JwtAuthenticationTokenFilter extends AbstractAuthenticationProcessi
     @Override
     public Authentication attemptAuthentication(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse)
             throws AuthenticationException, IOException, ServletException {
-
-        Cookie[] cookies = httpServletRequest.getCookies();
-        if( cookies == null || cookies.length < 1 ) {
-            throw new AuthenticationServiceException( "Invalid Token" );
-        }
-
-        Cookie sessionCookie = null;
-        for( Cookie cookie : cookies ) {
-            if( ( "token" ).equals( cookie.getName() ) ) {
-                sessionCookie = cookie;
+        String header  = httpServletRequest.getHeader(AUTHORIZATION_HEADER);
+        String token=null;
+        if (header!=null){
+            token=header.substring(7);
+        }else{
+            Cookie[] cookies = httpServletRequest.getCookies();
+            if( cookies == null || cookies.length < 1 ) {
+                throw new AuthenticationServiceException( "Invalid Token" );
             }
+
+            Cookie sessionCookie = null;
+            for( Cookie cookie : cookies ) {
+                if( ( "token" ).equals( cookie.getName() ) ) {
+                    sessionCookie = cookie;
+                }
+            }
+            token=sessionCookie.getValue();
         }
 
-        String header = BEARER_TOKEN+sessionCookie.getValue();
-        if(header == null || !header.startsWith(BEARER_TOKEN)) { // token no empieza con bearer
-            throw new RuntimeException("JWT is missing");
-        }
-
-        String authenticationToken = header.substring(7); // para coger el token a partir del caracter 7. Después de Bearer_
-        JwtAuthenticationToken token = new JwtAuthenticationToken(authenticationToken);
-
-        return getAuthenticationManager().authenticate(token);
+        String authenticationToken=token;
+        JwtAuthenticationToken auth_token = new JwtAuthenticationToken(authenticationToken);
+        return getAuthenticationManager().authenticate(auth_token);
     }
 
     @Override

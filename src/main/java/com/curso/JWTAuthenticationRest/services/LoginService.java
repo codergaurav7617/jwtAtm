@@ -7,9 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.ModelAndView;
+
 import javax.servlet.http.Cookie;
-import static com.curso.JWTAuthenticationRest.constants.Constants.ADMIN;
-import static com.curso.JWTAuthenticationRest.constants.Constants.ID;
+
+import static com.curso.JWTAuthenticationRest.constants.Constants.*;
 
 @Service
 public class LoginService {
@@ -43,10 +45,18 @@ public class LoginService {
     public Cookie create_cookie(String name, String value){
 
         // for creation of cookies storing in the browser and it is send in the every request(small piece of info store in the browser).
+
         Cookie cookie = new Cookie(name,value);
         cookie.setHttpOnly(true);
         cookie.setMaxAge(-cookieExpiration);
         cookie.setPath("/");
         return cookie;
     }
+
+    public ModelAndView getView(){
+        ModelAndView mv=new ModelAndView();
+        mv.setViewName(TRANSACTIONTYPE);
+        return mv;
+    }
+
 }

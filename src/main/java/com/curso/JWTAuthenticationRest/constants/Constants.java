@@ -36,6 +36,8 @@ public class Constants {
 
     public final static String SUCESS="sucess";
 
+    public final static String TRANSACTIONTYPE="Transaction_Type";
+
     public final static String TransactionHistory="Transaction_History";
 
     public final static String BALANCEMESSAGE="please enter the correct ammount";

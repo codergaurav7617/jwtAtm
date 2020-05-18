@@ -12,6 +12,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.dao.QueryTimeoutException;
+import org.springframework.retry.annotation.Retryable;
+
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -33,6 +36,7 @@ public class TransactionServiceTest {
 
         transactionService =  new TransactionService(accountRepository, transactionRepository);
     }
+
     @After
     public void tearDown() {
         verifyNoMoreInteractions(transactionRepository, accountRepository);
@@ -109,9 +113,9 @@ public class TransactionServiceTest {
     }
 
     @Test
-    public void test() throws NotHavingSufficentBalance {
-        when(accountRepository.findByUsername("yatharth")).thenReturn(new Account("yatharth"));
+    public void testSetBalanceOfUser() throws NotHavingSufficentBalance {
+        when(accountRepository.numberOfRRowUpdateForDeposit(273.00, "yatharth")).thenReturn(1);
         transactionService.setBalanceOfUser("yatharth","Deposit" ,273.00 );
-        verify(accountRepository).findByUsername("yatharth");
+        verify(accountRepository).numberOfRRowUpdateForDeposit(273.00, "yatharth");
     }
 }

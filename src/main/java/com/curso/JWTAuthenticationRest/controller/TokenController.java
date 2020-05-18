@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
+
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,12 +18,16 @@ import static com.curso.JWTAuthenticationRest.constants.Constants.*;
 @RestController
 @RequestMapping("/token")
 public class TokenController {
+
     private JwtGenerator jwtGenerator;
+
     @Autowired
     private LoginService loginService;
+
     public TokenController(JwtGenerator jwtGenerator) {
         this.jwtGenerator = jwtGenerator;
     }
+
     @PostMapping
     public ResponseEntity<?> generate(Login login,HttpServletResponse response) {
         System.out.println(login);

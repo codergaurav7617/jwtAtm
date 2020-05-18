@@ -1,5 +1,6 @@
 package com.curso.JWTAuthenticationRest.controller;
 
+import com.curso.JWTAuthenticationRest.exception.RegistrationFailure;
 import com.curso.JWTAuthenticationRest.model.Login;
 import com.curso.JWTAuthenticationRest.repositories.LoginRepository;
 import com.curso.JWTAuthenticationRest.services.RegistrationService;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/user")
 public class RegistrationController {
+
     @Autowired
     private RegistrationService registrationService;
 
@@ -19,7 +21,7 @@ public class RegistrationController {
     public boolean register(
             @RequestParam String user,
             @RequestParam String password
-    ){
+    ) throws RegistrationFailure {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         String encodedPassword = passwordEncoder.encode(password);
         registrationService.createUser(user, encodedPassword);

@@ -4,8 +4,11 @@ import com.curso.JWTAuthenticationRest.security.JwtAuthenticationEntryPoint;
 import com.curso.JWTAuthenticationRest.security.JwtAuthenticationProvider;
 import com.curso.JWTAuthenticationRest.security.JwtAuthenticationTokenFilter;
 import com.curso.JWTAuthenticationRest.security.JwtSuccessHandler;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
 import org.springframework.context.annotation.Bean;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -35,6 +38,7 @@ public class JwtSecurityConfig extends WebSecurityConfigurerAdapter implements W
     public AuthenticationManager authenticationManager() {
         return new ProviderManager(Collections.singletonList(authenticationProvider));
     }
+
 
     @Bean
     public JwtAuthenticationTokenFilter authenticationTokenFilter() {

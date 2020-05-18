@@ -3,18 +3,14 @@
       xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head>
     <title>Transaction Sucessful</title>
-
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-
 </head>
-
 <body>
-<span th:align="center">Your account balance is  </span>
+<span >Your account balance is  </span>
 <span th:text="${val}"></span>
 <br><br>
-
 
 <h2 th:align="center">All the previous view balance of the user:</h2>
 <br/>
@@ -31,12 +27,11 @@
             <td th:text="${Transaction_History.txnType}">...</td>
             <td th:text="${Transaction_History.username}">...</td>
             <td th:text="${Transaction_History.time_stamp}">...</td>
-
         </tr>
     </table>
 </div>
 <br>
-<form th:action="@{/login}" method="get" th:align="center">
+<form th:action="@{/logout}" method="get" th:align="center">
     <input type="submit" class="btn btn-secondary" value="Sign Out"/>
 </form>
 <br>

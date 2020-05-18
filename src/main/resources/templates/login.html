@@ -74,8 +74,9 @@
     $('#form2')
         .ajaxForm({
             url : '/token', // url
-            dataType : 'json',
+            async:false,
             success : function (response) {
+                 // todo can change the code
                 console.log(response);
                 var newUrl=window.location.protocol+"//"+window.location.host+"/txn";
                 window.open(newUrl,"_self")

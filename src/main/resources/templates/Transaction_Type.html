@@ -108,7 +108,7 @@
             error : function (response) {
                 var newUrl=window.location.protocol+"//"+window.location.host;
                var error_mess = (JSON.parse(response['responseText']).errorMessage);
-               if (error_mess == "please enter the correct ammount"){
+               if (error_mess == "Not Having Sufficient balance"){
                    alert(error_mess);
                    window.open(newUrl+"/txn","_self");
                }else{
