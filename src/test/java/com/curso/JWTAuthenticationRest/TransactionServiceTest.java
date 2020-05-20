@@ -12,14 +12,16 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.dao.QueryTimeoutException;
-import org.springframework.retry.annotation.Retryable;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.retry.annotation.EnableRetry;
 
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
+@EnableRetry
+@SpringBootTest(classes={TransactionService.class})
 @RunWith(MockitoJUnitRunner.class)
 public class TransactionServiceTest {
 
@@ -33,7 +35,7 @@ public class TransactionServiceTest {
 
     @Before
     public void setup() {
-
+        System.out.println("abc");
         transactionService =  new TransactionService(accountRepository, transactionRepository);
     }
 
@@ -118,4 +120,16 @@ public class TransactionServiceTest {
         transactionService.setBalanceOfUser("yatharth","Deposit" ,273.00 );
         verify(accountRepository).numberOfRRowUpdateForDeposit(273.00, "yatharth");
     }
+
+    @Test
+    public void test() throws NotHavingSufficentBalance {
+        when(accountRepository.numberOfRRowUpdateForDeposit(273.00, "yatharth")).thenReturn(1);
+        transactionService.setBalanceOfUser("yatharth","Deposit" ,273.00 );
+    }
+
+    @Test
+    public void test1(){
+        transactionService.retryService();
+    }
+
 }

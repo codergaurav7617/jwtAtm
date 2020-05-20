@@ -11,13 +11,9 @@ Feature: Test ATM Machine
   Scenario: check deposit Balance for new user
     Given Sign up
     When Get Token
-    Then deposit Balance for new user
+    Then deposit and withdraw parellel
 
-    Scenario: withdraw balance for new user
-      Given Sign up
-      When Get Token
-      Then withdraw balance from the new user
-
-
-
-
+  Scenario: withdraw balance for new user
+    Given Sign up
+    When Get Token
+    Then withdraw balance from the new user

@@ -55,9 +55,46 @@ public class ATMTest {
         Assert.assertTrue(response.contains("<span>0.0</span>"));
     }
 
+    @Then("deposit and withdraw parellel")
+    public void deposit_and_withdraw() throws ExecutionException, InterruptedException {
+        for (int j=0;j<1000;j++){
+            CompletableFuture<String>[] allFuturesDeposit = new CompletableFuture[3];
+            for (int i = 0; i < 3; i++) {
+                allFuturesDeposit[i] = CompletableFuture.supplyAsync(() -> {
+                    try {
+                        return deposit_Balance();
+                    } catch (ExecutionException e) {
+                        e.printStackTrace();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    return null;
+                });
+            }
+
+            CompletableFuture.allOf(allFuturesDeposit).join(); //This will join all threads
+            for (CompletableFuture<String> responseCompletableFuture : allFuturesDeposit) {
+                System.out.println(responseCompletableFuture.get());
+            }
+
+            CompletableFuture<String>[] allFuturesWithdraw = new CompletableFuture[4];
+
+            for (int i = 0; i < 4; i++) {
+                allFuturesWithdraw[i] = CompletableFuture.supplyAsync(() -> {
+                    return withdraw_balance();
+                });
+            }
+
+            CompletableFuture.allOf(allFuturesWithdraw).join(); //This will join all threads
+            for (CompletableFuture<String> responseCompletableFuture : allFuturesWithdraw) {
+                System.out.println(responseCompletableFuture.get());
+            }
+        }
+    }
+
     @Then("deposit Balance for new user")
-    public void deposit_Balance() throws ExecutionException, InterruptedException {
-        
+    public String deposit_Balance() throws ExecutionException, InterruptedException {
+
         HttpHeaders headers=new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
@@ -65,20 +102,8 @@ public class ATMTest {
 
         HttpEntity entity = new HttpEntity(headers);
         String response = restTemplate.postForEntity("http://localhost:8051/transaction/type?username=" + username +
-                "&txnType=Deposit"+ "&amount=150", entity, String.class).getBody();
-
-        CompletableFuture<String>[] allFutures = new CompletableFuture[1000];
-
-        for (int i = 0; i < 1000; i++) {
-            allFutures[i] = CompletableFuture.supplyAsync(() -> {
-                return withdraw_balance();
-            });
-        }
-
-        CompletableFuture.allOf(allFutures).join(); //This will join all threads
-        for (CompletableFuture<String> responseCompletableFuture : allFutures) {
-            System.out.println(responseCompletableFuture.get());
-        }
+                "&txnType=Deposit"+ "&amount=50", entity, String.class).getBody();
+         return response;
     }
 
     @Then("withdraw balance from the existing user")
@@ -91,7 +116,7 @@ public class ATMTest {
 
         HttpEntity entity = new HttpEntity(headers);
         String response = restTemplate.postForEntity("http://localhost:8051/transaction/type?username=" + username +
-                "&txnType=withdraw"+ "&amount=20", entity, String.class).getBody();
+                "&txnType=withdraw"+ "&amount=50", entity, String.class).getBody();
         Assert.assertTrue(response.contains(" <title>Transaction Sucessful</title>"));
         return response;
     }
@@ -107,7 +132,7 @@ public class ATMTest {
         HttpEntity entity = new HttpEntity(headers);
 
         try {
-             String response = restTemplate.postForEntity("http://localhost:8051/transaction/type?username=" + username +
+            String response = restTemplate.postForEntity("http://localhost:8051/transaction/type?username=" + username +
                     "&txnType=withdraw" + "&amount=50", entity, String.class).getBody();
             System.out.println(response);
         }catch (HttpStatusCodeException ex){

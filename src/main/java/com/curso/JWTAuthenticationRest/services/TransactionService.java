@@ -9,13 +9,13 @@ import com.curso.JWTAuthenticationRest.repositories.TransactionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.*;
 import org.springframework.retry.annotation.Backoff;
+
 import org.springframework.retry.annotation.EnableRetry;
 import org.springframework.retry.annotation.Recover;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.transaction.Transactional;
 import java.util.List;
 import static com.curso.JWTAuthenticationRest.constants.Constants.*;
 
@@ -79,44 +79,27 @@ public class TransactionService {
 
     @Retryable(maxAttempts = 4, backoff = @Backoff(delay = 500, multiplier = 2), include = { CannotAcquireLockException.class,
             QueryTimeoutException.class,
-            ConcurrencyFailureException.class, DataAccessResourceFailureException.class})
-
+            ConcurrencyFailureException.class, DataAccessResourceFailureException.class,RuntimeException.class})
     public  void setBalanceOfUser(String logged_in_user,String type,Double balance) throws NotHavingSufficentBalance{
-        System.out.println("abc");
         if (type.equals(WITHDRAW)){
             int num_row_affeted = accountRepository.numberOfRRowUpdateForWithdrawal(balance, logged_in_user);
             if (num_row_affeted==0){
                 throw new NotHavingSufficentBalance("Not Having Sufficient balance");
             }
         }else if (type.equals(DEPOSIT)){
+            System.out.println(accountRepository);
             accountRepository.numberOfRRowUpdateForDeposit(balance, logged_in_user);
         }
-        throw new QueryTimeoutException("time out");
+        String sql=null;
+        sql.toString();
     }
 
-    @Recover
-    public void recover(Exception e,String logged_in_user,String type,Double balance) throws Exception{
-        throw new Exception("Insufficent balance");
-    }
-
-    @Recover
-    public void recover(CannotAcquireLockException ex,String logged_in_user,String type,Double balance) throws CannotAcquireLockException {
-        throw new CannotAcquireLockException("cannot aquire the lock");
-    }
-
-
-    @Recover
-    public void recover(QueryTimeoutException ex,String logged_in_user,String type,Double balance) throws QueryTimeoutException {
-        throw new QueryTimeoutException("Querry time out exception ocurred");
-    }
-
-    @Recover
-    public void recover(ConcurrencyFailureException ex,String logged_in_user,String type,Double balance) throws ConcurrencyFailureException {
-        throw new ConcurrencyFailureException("Concurrency failure exception");
-    }
-
-    @Recover
-    public void recover(DataAccessResourceFailureException ex,String logged_in_user,String type,Double balance) throws DataAccessResourceFailureException {
-        throw new DataAccessResourceFailureException("Data Access resource failure exception");
+    @Retryable(
+            value = { NullPointerException.class },
+            maxAttempts = 4)
+    public void retryService() {
+        System.out.println("calling my api");
+        String sql=null;
+       sql.toString();
     }
 }

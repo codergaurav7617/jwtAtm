@@ -1,21 +1,26 @@
 package com.curso.JWTAuthenticationRest;
 
+import com.curso.JWTAuthenticationRest.exception.NotHavingSufficentBalance;
+import com.curso.JWTAuthenticationRest.services.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.retry.annotation.EnableRetry;
-
 import javax.persistence.EntityManagerFactory;
 
 @SpringBootApplication(scanBasePackages= {"com.curso.JWTAuthenticationRest"})
 @EnableJpaRepositories("com.curso.JWTAuthenticationRest.repositories")
+@EntityScan("com.curso.JWTAuthenticationRest.model")
 @EnableRetry
 public class JwtAuthenticationRestApplication {
 	@Autowired
 	private EntityManagerFactory entityManagerFactory;
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws NotHavingSufficentBalance {
 		SpringApplication.run(JwtAuthenticationRestApplication.class, args);
+		//ConfigurableApplicationContext context = SpringApplication.run(JwtAuthenticationRestApplication.class, args);
 	}
 }
