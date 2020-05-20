@@ -58,5 +58,4 @@ public class LoginService {
         mv.setViewName(TRANSACTIONTYPE);
         return mv;
     }
-
 }

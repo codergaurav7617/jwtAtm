@@ -25,13 +25,13 @@ public class ATMTest {
 
     @Given("Sign up")
     public void Sign_up() throws Throwable {
-        System.out.println(restTemplate.postForEntity("http://localhost:8051/user/register?user=" + username +
+        System.out.println(restTemplate.postForEntity("http://localhost:8054/user/register?user=" + username +
                 "&&password=" + password, "", String.class).getBody());
     }
 
     @Given("Get Token")
     public void Get_Token() throws Throwable {
-        String response = restTemplate.postForEntity("http://localhost:8051/token?user=" + username +
+        String response = restTemplate.postForEntity("http://localhost:8054/token?user=" + username +
                 "&&password=" + password, "", String.class).getBody();
         System.out.println(response);
         token = response.substring(2, response.length()-2);
@@ -49,7 +49,7 @@ public class ATMTest {
 
         HttpEntity entity = new HttpEntity(headers);
 
-        String response = restTemplate.postForEntity("http://localhost:8051/transaction/type?username=" + username +
+        String response = restTemplate.postForEntity("http://localhost:8054/transaction/type?username=" + username +
                 "&txnType=view", entity, String.class).getBody();
         System.out.println(response);
         Assert.assertTrue(response.contains("<span>0.0</span>"));
@@ -57,7 +57,9 @@ public class ATMTest {
 
     @Then("deposit and withdraw parellel")
     public void deposit_and_withdraw() throws ExecutionException, InterruptedException {
-        for (int j=0;j<1000;j++){
+        int count=0;
+        for (int j=0;j<10000;j++){
+
             CompletableFuture<String>[] allFuturesDeposit = new CompletableFuture[3];
             for (int i = 0; i < 3; i++) {
                 allFuturesDeposit[i] = CompletableFuture.supplyAsync(() -> {
@@ -73,6 +75,7 @@ public class ATMTest {
             }
 
             CompletableFuture.allOf(allFuturesDeposit).join(); //This will join all threads
+
             for (CompletableFuture<String> responseCompletableFuture : allFuturesDeposit) {
                 System.out.println(responseCompletableFuture.get());
             }
@@ -82,14 +85,21 @@ public class ATMTest {
             for (int i = 0; i < 4; i++) {
                 allFuturesWithdraw[i] = CompletableFuture.supplyAsync(() -> {
                     return withdraw_balance();
+                }).exceptionally(exception -> {
+                    System.err.println("exception: " + exception);
+                    return null;
                 });
             }
 
             CompletableFuture.allOf(allFuturesWithdraw).join(); //This will join all threads
             for (CompletableFuture<String> responseCompletableFuture : allFuturesWithdraw) {
                 System.out.println(responseCompletableFuture.get());
+                if (responseCompletableFuture.get()==null){
+                    count++;
+                }
             }
         }
+        System.out.println("NUMBER OF EXCEPTION IS " +count);
     }
 
     @Then("deposit Balance for new user")
@@ -101,7 +111,7 @@ public class ATMTest {
         headers.add("Authorization", "Bearer " + token);
 
         HttpEntity entity = new HttpEntity(headers);
-        String response = restTemplate.postForEntity("http://localhost:8051/transaction/type?username=" + username +
+        String response = restTemplate.postForEntity("http://localhost:8054/transaction/type?username=" + username +
                 "&txnType=Deposit"+ "&amount=50", entity, String.class).getBody();
          return response;
     }
@@ -115,9 +125,9 @@ public class ATMTest {
         headers.add("Authorization", "Bearer " + token);
 
         HttpEntity entity = new HttpEntity(headers);
-        String response = restTemplate.postForEntity("http://localhost:8051/transaction/type?username=" + username +
+        String response = restTemplate.postForEntity("http://localhost:8054/transaction/type?username=" + username +
                 "&txnType=withdraw"+ "&amount=50", entity, String.class).getBody();
-        Assert.assertTrue(response.contains(" <title>Transaction Sucessful</title>"));
+        //Assert.assertTrue(response.contains(" <title>Transaction Sucessful</title>"));
         return response;
     }
 
@@ -130,14 +140,13 @@ public class ATMTest {
         headers.add("Authorization", "Bearer " + token);
 
         HttpEntity entity = new HttpEntity(headers);
-
         try {
-            String response = restTemplate.postForEntity("http://localhost:8051/transaction/type?username=" + username +
+            String response = restTemplate.postForEntity("http://localhost:8054/transaction/type?username=" + username +
                     "&txnType=withdraw" + "&amount=50", entity, String.class).getBody();
-            System.out.println(response);
         }catch (HttpStatusCodeException ex){
             String response = ex.getResponseBodyAsString();
             Assert.assertTrue(response.contains("Not Having Sufficient balance"));
         }
     }
+
 }

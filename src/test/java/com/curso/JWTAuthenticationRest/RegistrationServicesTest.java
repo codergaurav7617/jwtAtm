@@ -1,12 +1,10 @@
 package com.curso.JWTAuthenticationRest;
 
 import com.curso.JWTAuthenticationRest.exception.RegistrationFailure;
+import com.curso.JWTAuthenticationRest.model.Login;
 import com.curso.JWTAuthenticationRest.repositories.AccountRepository;
 import com.curso.JWTAuthenticationRest.repositories.LoginRepository;
-import com.curso.JWTAuthenticationRest.repositories.TransactionRepository;
 import com.curso.JWTAuthenticationRest.services.RegistrationService;
-import com.curso.JWTAuthenticationRest.services.TransactionService;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -32,15 +30,18 @@ public class RegistrationServicesTest {
         registrationService = new RegistrationService(loginRepository, accountRepository);
     }
 
-    @After
-    public void tearDown() {
-        verifyNoMoreInteractions(loginRepository, accountRepository);
-    }
-
     @Test
     public void createUserTest() throws RegistrationFailure {
         when(loginRepository.findByUser("gaurav")).thenReturn(null);
         registrationService.createUser("gaurav", "1234");
        verify(loginRepository).findByUser("gaurav");
     }
+
+    @Test
+    public void createUserTest_when_user_already_exist() throws RegistrationFailure {
+        when(loginRepository.findByUser("gaurav")).thenReturn(new Login("gaurav","1234"));
+        registrationService.createUser("gaurav", "1234");
+        verify(loginRepository).findByUser("gaurav");
+    }
+
 }

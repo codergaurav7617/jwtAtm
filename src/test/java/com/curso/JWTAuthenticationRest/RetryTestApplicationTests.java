@@ -5,8 +5,6 @@ import com.curso.JWTAuthenticationRest.repositories.AccountRepository;
 import com.curso.JWTAuthenticationRest.repositories.TransactionRepository;
 import com.curso.JWTAuthenticationRest.services.TransactionService;
 import org.junit.After;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -30,11 +28,12 @@ class RetryTestApplicationTests {
 
     @Configuration
     public static class MyConfig {
-
         @Bean
         public AccountRepository getAccountBean() {
             System.out.println("A");
-            return Mockito.mock(AccountRepository.class);
+            AccountRepository a= Mockito.mock(AccountRepository.class);
+            System.out.println(a);
+            return a;
         }
         @Bean
         public TransactionRepository getTransactionBean()
@@ -50,8 +49,8 @@ class RetryTestApplicationTests {
     @Mock
     private TransactionRepository transactionRepository;
 
-    private final TransactionService transactionService=new TransactionService(accountRepository, transactionRepository);
-
+    @Autowired
+    private  TransactionService transactionService;
 
     @After
     public void tearDown() {
@@ -67,8 +66,4 @@ class RetryTestApplicationTests {
         transactionService.setBalanceOfUser("yatharth", "Deposit", 273.00);
     }
 
-    @Test
-    void test1(){
-        transactionService.retryService();
-    }
 }

@@ -21,6 +21,5 @@ public class JwtAuthenticationRestApplication {
 
 	public static void main(String[] args) throws NotHavingSufficentBalance {
 		SpringApplication.run(JwtAuthenticationRestApplication.class, args);
-		//ConfigurableApplicationContext context = SpringApplication.run(JwtAuthenticationRestApplication.class, args);
 	}
 }

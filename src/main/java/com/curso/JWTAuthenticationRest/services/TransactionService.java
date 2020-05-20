@@ -10,8 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.*;
 import org.springframework.retry.annotation.Backoff;
 
-import org.springframework.retry.annotation.EnableRetry;
-import org.springframework.retry.annotation.Recover;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.ModelAndView;
@@ -81,25 +79,14 @@ public class TransactionService {
             QueryTimeoutException.class,
             ConcurrencyFailureException.class, DataAccessResourceFailureException.class,RuntimeException.class})
     public  void setBalanceOfUser(String logged_in_user,String type,Double balance) throws NotHavingSufficentBalance{
+        System.out.println("Gaurav");
         if (type.equals(WITHDRAW)){
             int num_row_affeted = accountRepository.numberOfRRowUpdateForWithdrawal(balance, logged_in_user);
             if (num_row_affeted==0){
                 throw new NotHavingSufficentBalance("Not Having Sufficient balance");
             }
         }else if (type.equals(DEPOSIT)){
-            System.out.println(accountRepository);
             accountRepository.numberOfRRowUpdateForDeposit(balance, logged_in_user);
         }
-        String sql=null;
-        sql.toString();
-    }
-
-    @Retryable(
-            value = { NullPointerException.class },
-            maxAttempts = 4)
-    public void retryService() {
-        System.out.println("calling my api");
-        String sql=null;
-       sql.toString();
     }
 }

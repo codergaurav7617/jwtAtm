@@ -1,7 +1,6 @@
 package com.curso.JWTAuthenticationRest;
 
 import com.curso.JWTAuthenticationRest.exception.NotHavingSufficentBalance;
-import com.curso.JWTAuthenticationRest.model.Account;
 import com.curso.JWTAuthenticationRest.model.Transaction_History;
 import com.curso.JWTAuthenticationRest.repositories.AccountRepository;
 import com.curso.JWTAuthenticationRest.repositories.TransactionRepository;
@@ -120,16 +119,4 @@ public class TransactionServiceTest {
         transactionService.setBalanceOfUser("yatharth","Deposit" ,273.00 );
         verify(accountRepository).numberOfRRowUpdateForDeposit(273.00, "yatharth");
     }
-
-    @Test
-    public void test() throws NotHavingSufficentBalance {
-        when(accountRepository.numberOfRRowUpdateForDeposit(273.00, "yatharth")).thenReturn(1);
-        transactionService.setBalanceOfUser("yatharth","Deposit" ,273.00 );
-    }
-
-    @Test
-    public void test1(){
-        transactionService.retryService();
-    }
-
 }
