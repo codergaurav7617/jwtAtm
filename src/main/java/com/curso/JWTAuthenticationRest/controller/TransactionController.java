@@ -27,9 +27,11 @@ public class TransactionController {
 
         String logged_in_user=httpServletRequest.getRemoteUser();    // to find out the current user
 
-        transactionService.setBalanceOfUser(logged_in_user, tnx.getTxnType(),tnx.getAmount());  // get the account of current user
+       // transactionService.setBalanceOfUser(logged_in_user, tnx.getTxnType(),tnx.getAmount());  // get the account of current user
 
-        transactionService.create_txn(logged_in_user, tnx.getAmount(),tnx.getComment(),tnx.getTxnType()); // add the transaction record .
+       // transactionService.create_txn(logged_in_user, tnx.getAmount(),tnx.getComment(),tnx.getTxnType()); // add the transaction record .
+
+        transactionService.withdraw_and_update_transaction(logged_in_user, tnx.getTxnType(), tnx.getAmount(), tnx.getComment());
 
         ModelAndView mv=transactionService.getModelView(tnx, logged_in_user); // holder for model and view
 

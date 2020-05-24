@@ -74,7 +74,7 @@ public class ATMTest {
                 });
             }
 
-            CompletableFuture.allOf(allFuturesDeposit).join(); //This will join all threads
+            CompletableFuture.allOf(allFuturesDeposit).join();
 
             for (CompletableFuture<String> responseCompletableFuture : allFuturesDeposit) {
                 System.out.println(responseCompletableFuture.get());
@@ -91,7 +91,7 @@ public class ATMTest {
                 });
             }
 
-            CompletableFuture.allOf(allFuturesWithdraw).join(); //This will join all threads
+            CompletableFuture.allOf(allFuturesWithdraw).join();
             for (CompletableFuture<String> responseCompletableFuture : allFuturesWithdraw) {
                 System.out.println(responseCompletableFuture.get());
                 if (responseCompletableFuture.get()==null){

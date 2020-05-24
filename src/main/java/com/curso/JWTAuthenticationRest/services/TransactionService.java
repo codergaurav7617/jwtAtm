@@ -12,6 +12,7 @@ import org.springframework.retry.annotation.Backoff;
 
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
@@ -89,4 +90,28 @@ public class TransactionService {
             accountRepository.numberOfRRowUpdateForDeposit(balance, logged_in_user);
         }
     }
+
+    @Transactional
+    @Retryable(maxAttempts = 4, backoff = @Backoff(delay = 500, multiplier = 2), include = { CannotAcquireLockException.class,
+            QueryTimeoutException.class,
+            ConcurrencyFailureException.class, DataAccessResourceFailureException.class,RuntimeException.class})
+    public void withdraw_and_update_transaction(String logged_in_user,String type,Double balance, String comment)
+            throws NotHavingSufficentBalance{
+        System.out.println("Calling the withdrwa api");
+        if (type.equals(WITHDRAW)){
+            int num_row_affeted = accountRepository.numberOfRRowUpdateForWithdrawal(balance, logged_in_user);
+            if (num_row_affeted==0){
+                throw new NotHavingSufficentBalance("Not Having Sufficient balance");
+            }
+        }else if (type.equals(DEPOSIT)){
+            System.out.println(accountRepository);
+            int ac=accountRepository.numberOfRRowUpdateForDeposit(balance, logged_in_user);
+            System.out.println("gaurav");
+            System.out.println(ac);
+        }
+            Transaction_History th = new Transaction_History(logged_in_user, balance, comment, type);
+            System.out.println(th);
+            transactionRepository.save(th);
+    }
+
 }

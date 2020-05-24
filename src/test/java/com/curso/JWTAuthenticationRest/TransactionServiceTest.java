@@ -116,7 +116,7 @@ public class TransactionServiceTest {
     @Test
     public void testSetBalanceOfUser() throws NotHavingSufficentBalance {
         when(accountRepository.numberOfRRowUpdateForDeposit(273.00, "yatharth")).thenReturn(1);
-        transactionService.setBalanceOfUser("yatharth","Deposit" ,273.00 );
+       // transactionService.setBalanceOfUser("yatharth","Deposit" ,273.00 );
         verify(accountRepository).numberOfRRowUpdateForDeposit(273.00, "yatharth");
     }
 }
