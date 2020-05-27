@@ -7,10 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import static com.curso.JWTAuthenticationRest.constants.Constants.DATA;
-import static com.curso.JWTAuthenticationRest.constants.Constants.TransactionHistory;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+
+import static com.curso.JWTAuthenticationRest.constants.Constants.*;
+
 @RestController
 @RequestMapping("/transaction")
 public class TransactionController {
@@ -26,13 +27,8 @@ public class TransactionController {
     ) throws NotHavingSufficentBalance {
 
         String logged_in_user=httpServletRequest.getRemoteUser();    // to find out the current user
-
-       // transactionService.setBalanceOfUser(logged_in_user, tnx.getTxnType(),tnx.getAmount());  // get the account of current user
-
-       // transactionService.create_txn(logged_in_user, tnx.getAmount(),tnx.getComment(),tnx.getTxnType()); // add the transaction record .
-
         transactionService.withdraw_and_update_transaction(logged_in_user, tnx.getTxnType(), tnx.getAmount(), tnx.getComment());
-
+        System.out.println("def");
         ModelAndView mv=transactionService.getModelView(tnx, logged_in_user); // holder for model and view
 
         return mv;
@@ -61,6 +57,20 @@ public class TransactionController {
 
         ModelAndView mv= transactionService.getView(TransactionHistory);
         mv.addObject(DATA, list_of_txn);
+        return mv;
+    }
+
+    @RequestMapping("/withdraw")
+    public ModelAndView getWithdrawView(HttpServletRequest httpServletRequest){
+        System.out.println("A");
+        ModelAndView mv=transactionService.getView(WITHDRAWHOME);
+        return mv;
+    }
+
+    @RequestMapping("/deposit")
+    public ModelAndView getDepositView(HttpServletRequest httpServletRequest){
+        System.out.println("B");
+        ModelAndView mv=transactionService.getView(DEPOSITHOME);
         return mv;
     }
 }

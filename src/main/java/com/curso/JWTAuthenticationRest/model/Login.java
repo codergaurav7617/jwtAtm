@@ -15,12 +15,12 @@ public class Login {
     @Getter@Setter
     private String user;
     @Getter @Setter
-    private String password;
+    private String pin;
 
     public Login(){}
 
-    public Login(String user,String password){
+    public Login(String user,String pin){
         this.user=user;
-        this.password=password;
+        this.pin=pin;
     }
 }

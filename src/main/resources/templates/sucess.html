@@ -19,17 +19,79 @@
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<style>
+    .calcBtn {
+        font-size: 10px;
+        width: 70px;
+        height: 70px;
+        margin: 2px;
+    }
 
+</style>
 </head>
 <!--[[${#httpServletRequest.remoteUser}]]-->
 <body>
 <h1 th:inline="text" th:align="center">Hello  Transaction Sucessful!</h1>
+
+<!--Not working properly have a look-->
+
 <form id="form1" th:action="@{/logout}" method="get" th:align="center">
     <input type="submit" class="btn btn-secondary" value="Sign Out"/>
 </form>
+
 <br><br>
+
 <form id="form2" th:action="@{/txn}" method="get" th:align="center">
     <input type="submit" class="btn btn-secondary" value="Home"/>
+
 </form>
+
+
+
+<div id="VirtualKey" align="center">
+    <input class="calcBtn" id="btn7" type="button" onclick="input(this);" value="7"/>
+    <input class="calcBtn" id="btn8" type="button" onclick="input(this);" value="8"/>
+    <input class="calcBtn" id="btn9" type="button" onclick="input(this);" value="9"/>
+    <input class="calcBtn" id="btnCan" type="button" onclick="location.href='/token/logout'" style="color:green" value="Cancel"/>
+    <br />
+
+    <input class="calcBtn" id="btn4" type="button" onclick="input(this);" value="4"/>
+    <input class="calcBtn" id="btn5" type="button" onclick="input(this);" value="5"/>
+    <input class="calcBtn" id="btn6" type="button" onclick="input(this);" value="6"/>
+    <input class="calcBtn" id="btnBack" type="button" onclick="back()" style="color:green" value="BackSpace"/>
+    <br />
+    <input class="calcBtn" id="btn1" type="button" onclick="input(this);" value="1" />
+    <input class="calcBtn" id="btn2" type="button" onclick="input(this);" value="2" />
+    <input class="calcBtn" id="btn3" type="button" onclick="input(this);" value="3"/>
+    <input class="calcBtn" id="btnEnt" type="button" onclick="ent()" style="color:green" value="Enter"/>
+    <br />
+    <input class="calcBtn" id="btnDot" type="button" onclick="input(this)" style="color:green" value="."/>
+    <input class="calcBtn" id="btn0" type="button" onclick="input(this)" value="0"/>
+    <input class="calcBtn" id="btn.00" type="button" onclick="input(this)" value=".00"/>
+    <input class="calcBtn" id="btnDel" type="button" style="color:red" value="Delete" onclick="del();" />
+</div>
+
+<script>
+    function input(e) {
+        var tbInput = document.getElementById("amount");
+        if (amount.value.length < 16) {
+            amount.value=amount.value + e.value;
+        }
+    }
+
+    function back() {
+        var tbInput = document.getElementById("amount");
+        amount.value = amount.value.substr(0, amount.value.length-1);
+    }
+
+    function del() {
+        var tbInput = document.getElementById("amount");
+        amount.value = "";
+    }
+
+</script>
+
+
 </body>
+
 </html>

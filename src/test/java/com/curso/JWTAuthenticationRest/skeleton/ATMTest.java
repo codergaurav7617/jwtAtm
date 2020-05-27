@@ -1,38 +1,62 @@
 package com.curso.JWTAuthenticationRest.skeleton;
 
+import com.curso.JWTAuthenticationRest.JwtAuthenticationRestApplication;
 import com.curso.JWTAuthenticationRest.exception.NotHavingSufficentBalance;
+import com.curso.JWTAuthenticationRest.model.Transaction_History;
+import com.curso.JWTAuthenticationRest.repositories.AccountRepository;
+import com.curso.JWTAuthenticationRest.services.TransactionService;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import org.junit.Assert;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Collections;
-import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
+@RunWith(SpringRunner.class)
+@SpringBootTest()
+@ActiveProfiles("test")
 public class ATMTest {
 
     RestTemplate restTemplate = new RestTemplate();
 
-    private final String username = UUID.randomUUID().toString();
-    private final String password = UUID.randomUUID().toString();
+    private final String username = "user";
+    private final String password = "1234";
     private String token;
 
-    @Given("Sign up")
-    public void Sign_up() throws Throwable {
-        System.out.println(restTemplate.postForEntity("http://localhost:8054/user/register?user=" + username +
-                "&&password=" + password, "", String.class).getBody());
+    @Autowired
+    private AccountRepository accountRepository;
+    @Autowired
+    private TransactionService transactionService;
+
+    @Test
+    public void shouldInjectService() throws Throwable {
+        System.out.println(accountRepository.findByUsername("user"));
+        transactionService.withdraw_and_update_transaction("user", "Deposit", 120.00, "hi");
+        System.out.println(accountRepository.findByUsername("user"));
+        System.out.println(accountRepository==null);
     }
 
     @Given("Get Token")
     public void Get_Token() throws Throwable {
-        String response = restTemplate.postForEntity("http://localhost:8054/token?user=" + username +
-                "&&password=" + password, "", String.class).getBody();
+        String response = restTemplate.postForEntity("http://localhost:8071/token?user=" + username +
+                "&&pin=" + password, "", String.class).getBody();
         System.out.println(response);
         token = response.substring(2, response.length()-2);
         System.out.println(token);
@@ -49,10 +73,10 @@ public class ATMTest {
 
         HttpEntity entity = new HttpEntity(headers);
 
-        String response = restTemplate.postForEntity("http://localhost:8054/transaction/type?username=" + username +
+        String response = restTemplate.postForEntity("http://localhost:8071/transaction/type?username=" + username +
                 "&txnType=view", entity, String.class).getBody();
         System.out.println(response);
-        Assert.assertTrue(response.contains("<span>0.0</span>"));
+        Assert.assertTrue(response.contains("<span>100.0</span>"));
     }
 
     @Then("deposit and withdraw parellel")
@@ -111,7 +135,7 @@ public class ATMTest {
         headers.add("Authorization", "Bearer " + token);
 
         HttpEntity entity = new HttpEntity(headers);
-        String response = restTemplate.postForEntity("http://localhost:8054/transaction/type?username=" + username +
+        String response = restTemplate.postForEntity("http://localhost:8071/transaction/type?username=" + username +
                 "&txnType=Deposit"+ "&amount=50", entity, String.class).getBody();
          return response;
     }
@@ -120,12 +144,13 @@ public class ATMTest {
     public String withdraw_balance(){
 
         HttpHeaders headers=new HttpHeaders();
+
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
         headers.add("Authorization", "Bearer " + token);
 
         HttpEntity entity = new HttpEntity(headers);
-        String response = restTemplate.postForEntity("http://localhost:8054/transaction/type?username=" + username +
+        String response = restTemplate.postForEntity("http://localhost:8071/transaction/type?username=" + username +
                 "&txnType=withdraw"+ "&amount=50", entity, String.class).getBody();
         //Assert.assertTrue(response.contains(" <title>Transaction Sucessful</title>"));
         return response;
@@ -140,13 +165,24 @@ public class ATMTest {
         headers.add("Authorization", "Bearer " + token);
 
         HttpEntity entity = new HttpEntity(headers);
+
         try {
-            String response = restTemplate.postForEntity("http://localhost:8054/transaction/type?username=" + username +
-                    "&txnType=withdraw" + "&amount=50", entity, String.class).getBody();
+            String response = restTemplate.postForEntity("http://localhost:8071/transaction/type?username=" + username +
+                    "&txnType=Deposit" + "&amount=50", entity, String.class).getBody();
+            System.out.println(response);
         }catch (HttpStatusCodeException ex){
             String response = ex.getResponseBodyAsString();
-            Assert.assertTrue(response.contains("Not Having Sufficient balance"));
+            System.out.println(response);
+            Assert.assertTrue(response.contains("null"));
         }
-    }
+        String response1 = restTemplate.postForEntity("http://localhost:8071/transaction/type?username=" + username +
+                "&txnType=view", entity, String.class).getBody();
 
+        System.out.println(response1);
+
+        //Assert.assertTrue(response1.contains("<span>50.0</span>"));
+        String history=restTemplate.postForEntity("http://localhost:8071/transaction/history?username=" + username, entity, String.class).getBody();
+        System.out.println(history);
+        System.out.println(accountRepository==null);
+    }
 }

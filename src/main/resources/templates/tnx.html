@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Home_Screen</title>
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.js"></script>
+    <script src="http://malsup.github.com/jquery.form.js"></script>
+
+    <script type="text/javascript">
+        function EnableDisableTextBox() {
+            document.getElementById('amount').removeAttribute('disabled');
+            document.getElementById('comment').removeAttribute('disabled');
+        }
+
+    </script>
+
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.js"></script>
+    <script src="http://malsup.github.com/jquery.form.js"></script>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #17a2b8;
+            height: 100vh;
+        }
+        #login .container #login-row #login-column #login-box {
+            margin-top: 30px;
+            max-width: 600px;
+            height: 420px;
+            border: 1px solid #9C9C9C;
+            background-color: #EAEAEA;
+        }
+        #login .container #login-row #login-column #login-box #login-form {
+            padding: 20px;
+        }
+        #login .container #login-row #login-column #login-box #form2 #register-link {
+            margin-top: -85px;
+        }
+        .form-group-button {
+            margin-left: 10px;
+            margin-top: 70px;
+            display: inline-block;
+        }
+
+        #text{
+            margin-top: 45px;
+        }
+
+        .PINtext {
+            font-size:40px;
+            width: 500px;
+            text-align: center;
+        }
+        .calcBtn {
+            font-size: 10px;
+            width: 50px;
+            height: 50px;
+            margin: 3px;
+        }
+
+    </style>
+</head>
+
+<body>
+<div>
+    <div id="login" th:inline="">
+        <h3 class="text-center text-white pt-5">Transaction Type</h3>
+        <div class="container">
+            <div id="login-row" class="row justify-content-center align-items-center">
+                <div id="login-column" class="col-md-6">
+                    <div id="login-box" class="col-md-12">
+                        <form id="form2" class="form" method="post" >
+                            <h3 id="text" class="text-center text-info">Select the type of transaction</h3>
+                            <div class="form-group-button" th:align="center">
+                                <input type="submit"  id="viewButton" name="History" class="btn btn-info btn-md" value="View Balance" >
+                            </div>
+                            <div  class="form-group-button" th:align="center">
+                                <input type="submit"  id="withdraw" form="form2" name="submit" class="btn btn-info btn-md" value="Withdraw">
+                            </div>
+                            <div  class="form-group-button" th:align="center">
+                                <input  type="submit"   id="showTransactionButton" name="Transaction" class="btn btn-info btn-md" value="Txn History">
+                            </div>
+                            <div class="form-group-button" th:align="center">
+                                <input type="submit"   id="showTransactionButton1" name="Transaction" class="btn btn-info btn-md" value="Deposit">
+                            </div>
+                            <br>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="VirtualKey" align="center">
+        <input class="calcBtn" id="btn1" type="button" onclick="input(this);" value="7" />
+        <input class="calcBtn" id="btn2" type="button" onclick="input(this);" value="8" />
+        <input class="calcBtn" id="btn3" type="button" onclick="input(this);"
+               value="9"/>
+        <input class="calcBtn" id="btnCan" type="button" onclick="ent()" style="color:green"
+               value="Cancel"/>
+        <br />
+        <input class="calcBtn" id="btn4" type="button" onclick="input(this);"
+               value="4"/>
+        <input class="calcBtn" id="btn5" type="button" onclick="input(this);"
+               value="5"/>
+        <input class="calcBtn" id="btn6" type="button" onclick="input(this);"
+               value="6"/>
+        <input class="calcBtn" id="btnBack" type="button" onclick="ent()" style="color:green"
+               value="Backspace"/>
+        <br />
+        <input class="calcBtn" id="btn7" type="button" onclick="input(this);"
+               value="1"/>
+        <input class="calcBtn" id="btn8" type="button" onclick="input(this);"
+               value="2"/>
+        <input class="calcBtn" id="btn9" type="button" onclick="input(this);"
+               value="3"/>
+        <input class="calcBtn" id="btnConfirm" type="button" onclick="ent()" style="color:green"
+               value="Confirm"/>
+        <br />
+        <input class="calcBtn" id="btnDot" type="button" onclick="input(this)"
+               value="."/>
+        <input class="calcBtn" id="btn0" type="button" onclick="input(this)"
+               value="0"/>
+        <input class="calcBtn" id="btnEnt" type="button" onclick="ent()" style="color:green"
+               value="Enter"/>
+
+        <input class="calcBtn" id="btnDel" type="button" style="color:red" value="Delete" onclick="del();" />
+    </div>
+</div>
+
+<script>
+    $('#form2')
+        .ajaxForm({
+            url : '/transaction/type', // url
+            async : false,
+            success : function (response) {
+                $("body").html(response);
+            },
+            error : function (response) {
+                var newUrl=window.location.protocol+"//"+window.location.host;
+                var error_mess = (JSON.parse(response['responseText']).errorMessage);
+                if (error_mess == "Not Having Sufficient balance"){
+                    alert(error_mess);
+                    window.open(newUrl+"/txn","_self");
+                }else{
+                    alert("Session time out please login again")
+                    window.open(newUrl+"/login","_self");
+                }
+            }
+        });
+</script>
+
+<script>
+    $('#historyButton').on('click',function(){
+        $.ajax({
+            url: "/transaction/history",
+            type: 'GET',
+            async: false,
+            success : function (response) {
+                $("body").html(response);
+            },
+            error : function (response) {
+                var newUrl=window.location.protocol+"//"+window.location.host;
+                var status_code=response.status;
+                if(status_code == 500){
+                    alert("Session time out please login again");
+                    window.open(newUrl+"/login","_self");
+                }
+            }
+        })
+    });
+</script>
+
+<script>
+    $('#showTransactionButton').on('click',function(){
+        $.ajax({
+            url: "/transaction/showtransaction",
+            type: 'GET',
+            async: false,
+            success : function (response) {
+                $("body").html(response);
+            },
+            error : function (response) {
+                var newUrl=window.location.protocol+"//"+window.location.host;
+                var status_code=response.status;
+                if(status_code == 500){
+                    alert("Session time out please login again");
+                    window.open(newUrl+"/login","_self");
+                }
+            }
+        })
+    });
+</script>
+
+</body>
+</html>

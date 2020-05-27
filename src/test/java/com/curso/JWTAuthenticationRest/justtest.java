@@ -10,33 +10,30 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.retry.annotation.EnableRetry;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.junit4.SpringRunner;
+
 import static org.mockito.Mockito.*;
-@EnableRetry
-@SpringBootTest(classes={TransactionService.class})
-@RunWith(MockitoJUnitRunner.class)
+
+@RunWith(SpringRunner.class)
+@SpringBootTest()
+@ActiveProfiles("test")
 public class justtest {
 
-    private TransactionService transactionService;
-
-    @Mock
+    @Autowired
     private AccountRepository accountRepository;
 
-    @Mock
-    private TransactionRepository transactionRepository;
-
-    @Before
-    public void setup() {
-        transactionService =  new TransactionService(accountRepository, transactionRepository);
-    }
+    @Autowired
+    private TransactionService transactionService;
 
     @Test
-    public void testSetBalanceOfUser() throws NotHavingSufficentBalance {
-        when(accountRepository.numberOfRRowUpdateForDeposit(273.00, "yatharth")).thenReturn(1);
-        Transaction_History th=new Transaction_History("Yatharth", 273.00, "good", "Deposit");
-        System.out.println(th);
-        when(transactionRepository.save(new Transaction_History())).thenThrow(RuntimeException.class);
-        transactionService.withdraw_and_update_transaction("yatharth", "Deposit", 273.00,"good");
+    public void shouldInjectService() throws NotHavingSufficentBalance {
+        System.out.println(accountRepository.findByUsername("user"));
+        transactionService.withdraw_and_update_transaction("user", "Deposit", 120.00, "hi");
+        System.out.println(accountRepository.findByUsername("user"));
+        System.out.println(accountRepository==null);
     }
 }

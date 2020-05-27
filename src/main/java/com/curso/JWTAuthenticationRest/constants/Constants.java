@@ -40,6 +40,10 @@ public class Constants {
 
     public final static String TransactionHistory="Transaction_History";
 
+    public final static String WITHDRAWHOME="withdrawHome";
+
+    public final static String DEPOSITHOME="depositHome";
+
     public final static String BALANCEMESSAGE="please enter the correct ammount";
 
     public final static String TOKEN ="token";

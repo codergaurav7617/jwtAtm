@@ -64,6 +64,7 @@ public class JwtSecurityConfig extends WebSecurityConfigurerAdapter implements W
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         httpSecurity.addFilterBefore(authenticationTokenFilter(), UsernamePasswordAuthenticationFilter.class);
-        httpSecurity.headers().cacheControl();
+        httpSecurity.headers().frameOptions().sameOrigin();
     }
+
 }

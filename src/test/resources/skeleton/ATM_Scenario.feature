@@ -14,6 +14,6 @@ Feature: Test ATM Machine
     Then deposit and withdraw parellel
 
   Scenario: withdraw balance for new user
-    Given Sign up
-    When Get Token
+    Then Get Token
     Then withdraw balance from the new user
+

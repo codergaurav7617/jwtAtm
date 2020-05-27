@@ -33,6 +33,7 @@ public class TransactionService {
 
     public Double getBalance(String username){
         Account account_of_user=accountRepository.findByUsername(username);
+        System.out.println(account_of_user);
         return account_of_user.getAmount();
     }
 
@@ -60,11 +61,11 @@ public class TransactionService {
     }
 
     public ModelAndView getModelView(Transaction_History tnx,String logged_in_user){
-
+        System.out.println("inside model and view");
         if (tnx.getTxnType().equals(Constants.VIEW)){
 
-            Double amount=getBalance(logged_in_user);   // get the total balance in the logged in user account
-
+            String  amount="Your balance is : " + getBalance(logged_in_user);   // get the total balance in the logged in user account
+            System.out.println("ammount"+amount);
             List<Transaction_History> list_of_txn=getAllTheViewTransaction(logged_in_user); //get all the view transaction
 
             ModelAndView mv=getView(BALANCE);
@@ -76,20 +77,6 @@ public class TransactionService {
         }
     }
 
-    @Retryable(maxAttempts = 4, backoff = @Backoff(delay = 500, multiplier = 2), include = { CannotAcquireLockException.class,
-            QueryTimeoutException.class,
-            ConcurrencyFailureException.class, DataAccessResourceFailureException.class,RuntimeException.class})
-    public  void setBalanceOfUser(String logged_in_user,String type,Double balance) throws NotHavingSufficentBalance{
-        System.out.println("Gaurav");
-        if (type.equals(WITHDRAW)){
-            int num_row_affeted = accountRepository.numberOfRRowUpdateForWithdrawal(balance, logged_in_user);
-            if (num_row_affeted==0){
-                throw new NotHavingSufficentBalance("Not Having Sufficient balance");
-            }
-        }else if (type.equals(DEPOSIT)){
-            accountRepository.numberOfRRowUpdateForDeposit(balance, logged_in_user);
-        }
-    }
 
     @Transactional
     @Retryable(maxAttempts = 4, backoff = @Backoff(delay = 500, multiplier = 2), include = { CannotAcquireLockException.class,
@@ -104,14 +91,10 @@ public class TransactionService {
                 throw new NotHavingSufficentBalance("Not Having Sufficient balance");
             }
         }else if (type.equals(DEPOSIT)){
-            System.out.println(accountRepository);
-            int ac=accountRepository.numberOfRRowUpdateForDeposit(balance, logged_in_user);
-            System.out.println("gaurav");
-            System.out.println(ac);
+            accountRepository.numberOfRRowUpdateForDeposit(balance, logged_in_user);
         }
-            Transaction_History th = new Transaction_History(logged_in_user, balance, comment, type);
-            System.out.println(th);
-            transactionRepository.save(th);
-    }
 
+        Transaction_History th = new Transaction_History(logged_in_user, balance, comment, type);
+        transactionRepository.save(th);
+    }
 }

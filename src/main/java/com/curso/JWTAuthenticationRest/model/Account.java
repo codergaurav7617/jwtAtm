@@ -12,7 +12,7 @@ public class Account {
     @Id
     @GeneratedValue
     @Getter @Setter
-    private int accountId;
+    private int id;
     @Getter @Setter
     private String username;
 
@@ -30,5 +30,14 @@ public class Account {
 
     public void depositAmount(Double amount) {
         this.amount += amount;
+    }
+
+    @Override
+    public String toString() {
+        return "Account{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", amount=" + amount +
+                '}';
     }
 }

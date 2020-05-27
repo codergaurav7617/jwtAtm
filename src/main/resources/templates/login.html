@@ -34,10 +34,16 @@
         #login .container #login-row #login-column #login-box #form2 #register-link {
             margin-top: -85px;
         }
+         .calcBtn {
+             font-size: 10px;
+             width: 70px;
+             height: 70px;
+             margin: 2px;
+         }
+
     </style>
 
 </head>
-
 
 <body>
 <div id="login">
@@ -50,25 +56,80 @@
                         <h3 class="text-center text-info">Login</h3>
                         <div class="form-group">
                             <label for="username" class="text-info">Username:</label><br>
-                            <input type="text" name="user" id="username" class="form-control">
+                            <input type="text" name="user" id="username" class="form-control" autofocus>
                         </div>
                         <div class="form-group">
-                            <label for="password" class="text-info">Password:</label><br>
-                            <input type="password" name="password" id="password" class="form-control">
+                            <label for="password" class="text-info">pin:</label><br>
+                            <input type="password" name="pin" id="password" class="form-control">
                         </div>
-                        <div class="form-group" th:align="center">
-                            <input type="submit"  form="form2" name="submit" class="btn btn-info btn-md" value="submit">
-                        </div>
+<!--                        <div class="form-group" th:align="center">-->
+<!--                            <input type="submit"  form="form2" name="submit" class="btn btn-info btn-md" value="submit" autofocus>-->
+<!--                        </div>-->
                         <br>
-                        <div id="register-link" class="text-right">
-                            <a href="/SignUp" class="text-info">Register here</a>
-                        </div>
+<!--                        <div id="register-link" class="text-right">-->
+<!--                            <a href="/SignUp" class="text-info">Register here</a>-->
+<!--                        </div>-->
                     </form>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+
+<div id="VirtualKey" align="center">
+    <input class="calcBtn" id="btn7" type="button" onclick="input(this);" value="7"/>
+    <input class="calcBtn" id="btn8" type="button" onclick="input(this);" value="8"/>
+    <input class="calcBtn" id="btn9" type="button" onclick="input(this);" value="9"/>
+    <input class="calcBtn" id="btnCan" type="button" onclick="location.href='/token/logout'" style="color:green" value="Cancel"/>
+    <br />
+
+    <input class="calcBtn" id="btn4" type="button" onclick="input(this);" value="4"/>
+    <input class="calcBtn" id="btn5" type="button" onclick="input(this);" value="5"/>
+    <input class="calcBtn" id="btn6" type="button" onclick="input(this);" value="6"/>
+    <input class="calcBtn" id="btnBack" type="button" onclick="back()" style="color:green" value="BackSpace"/>
+    <br />
+    <input class="calcBtn" id="btn1" type="button" onclick="input(this);" value="1" />
+    <input class="calcBtn" id="btn2" type="button" onclick="input(this);" value="2" />
+    <input class="calcBtn" id="btn3" type="button" onclick="input(this);" value="3"/>
+    <input class="calcBtn" id="btnEnt" type="submit" form="form2" style="color:green" value="Enter"/>
+    <br />
+    <input class="calcBtn" id="btnDot" type="button" onclick="input(this)" style="color:green" value="."/>
+    <input class="calcBtn" id="btn0" type="button" onclick="input(this)" value="0"/>
+    <input class="calcBtn" id="btn.00" type="button" onclick="input(this)" value=".00"/>
+    <input class="calcBtn" id="btnDel" type="button" style="color:red" value="Delete" onclick="del();" />
+</div>
+
+<script>
+    function input(e) {
+
+        var tbInput = document.getElementById("username");
+        username.value=username.value + e.value;
+
+        // var hasFocususer = $('#username').is(':focus');
+        // console.log(hasFocususer)
+        // if (hasFocususer){
+        //     var tbInput = document.getElementById("username");
+        //         username.value=username.value + e.value;
+        // }
+        // var hasFocusPin=$('#password').is(':focus');
+        // if (hasFocusPin){
+        //     var tbInput = document.getElementById("password");
+        //     password.value=password.value + e.value;
+        // }
+    }
+
+    function back() {
+        var tbInput = document.getElementById("username");
+        username.value = username.value.substr(0, username.value.length-1);
+    }
+
+    function del() {
+        var tbInput = document.getElementById("username");
+        username.value = "";
+    }
+
+</script>
 
 <script>
     $('#form2')
@@ -79,6 +140,7 @@
                  // todo can change the code
                 console.log(response);
                 var newUrl=window.location.protocol+"//"+window.location.host+"/txn";
+               console.log(newUrl);
                 window.open(newUrl,"_self")
             },
             error : function (response) {

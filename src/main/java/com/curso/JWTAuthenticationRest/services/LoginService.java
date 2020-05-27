@@ -23,14 +23,10 @@ public class LoginService {
     private LoginRepository loginRepository;
 
     public JwtUser existUser(Login login) {
-        // for finding out the user from the db on the basis of user name
         Login l=loginRepository.findByUser(login.getUser());
-
         // for password matching
         BCryptPasswordEncoder passwordEncoder=new BCryptPasswordEncoder();
-
-        boolean isPasswordMatches=passwordEncoder.matches(login.getPassword(), l.getPassword());
-
+        boolean isPasswordMatches=passwordEncoder.matches(login.getPin()+"", l.getPin());
         if(login.getUser().equals(l.getUser()) && isPasswordMatches) {
             JwtUser jwtUser = new JwtUser();
             jwtUser.setUsername(login.getUser());
@@ -45,7 +41,6 @@ public class LoginService {
     public Cookie create_cookie(String name, String value){
 
         // for creation of cookies storing in the browser and it is send in the every request(small piece of info store in the browser).
-
         Cookie cookie = new Cookie(name,value);
         cookie.setHttpOnly(true);
         cookie.setMaxAge(-cookieExpiration);
@@ -58,4 +53,5 @@ public class LoginService {
         mv.setViewName(TRANSACTIONTYPE);
         return mv;
     }
+
 }
