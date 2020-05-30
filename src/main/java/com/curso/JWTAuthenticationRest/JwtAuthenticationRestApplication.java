@@ -17,7 +17,6 @@ public class JwtAuthenticationRestApplication {
 
 	@Autowired
 	private EntityManagerFactory entityManagerFactory;
-
 	public static void main(String[] args) throws NotHavingSufficentBalance {
 		SpringApplication.run(JwtAuthenticationRestApplication.class, args);
 	}

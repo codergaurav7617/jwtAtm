@@ -12,6 +12,6 @@ INSERT INTO LOGIN(id,user,pin)
 
 INSERT INTO ACCOUNT(id,username,amount)
          VALUES (4,
-               'user',
+               '987654',
                0.0
          );

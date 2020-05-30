@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 
 <head>
     <title>Home_Screen</title>
@@ -112,7 +112,6 @@
     <input class="calcBtn" id="btn.00" type="button" onclick="input(this)" value=".00"/>
     <input class="calcBtn" id="btnDel" type="button" style="color:red" value="Delete" onclick="del();" />
 </div>
-
 <script>
     function input(e) {
         var tbInput = document.getElementById("amount");

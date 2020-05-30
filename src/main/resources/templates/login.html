@@ -56,7 +56,7 @@
                         <h3 class="text-center text-info">Login</h3>
                         <div class="form-group">
                             <label for="username" class="text-info">Username:</label><br>
-                            <input type="text" name="user" id="username" class="form-control" autofocus>
+                            <input type="text" name="user" id="username" class="form-control" >
                         </div>
                         <div class="form-group">
                             <label for="password" class="text-info">pin:</label><br>
@@ -102,21 +102,34 @@
 
 <script>
     function input(e) {
-
+        console.log(e.value);
         var tbInput = document.getElementById("username");
         username.value=username.value + e.value;
 
-        // var hasFocususer = $('#username').is(':focus');
-        // console.log(hasFocususer)
-        // if (hasFocususer){
+
+        // $("username").click(function (e) {
         //     var tbInput = document.getElementById("username");
-        //         username.value=username.value + e.value;
-        // }
-        // var hasFocusPin=$('#password').is(':focus');
-        // if (hasFocusPin){
+        //     username.value=username.value + e.value;
+        // })
+        //
+        // $("password").click(function (e) {
         //     var tbInput = document.getElementById("password");
         //     password.value=password.value + e.value;
-        // }
+        // })
+
+        /*
+        var hasFocususer = $('#username').is(':focus');
+        console.log(hasFocususer)
+        if (hasFocususer){
+                var tbInput = document.getElementById("username");
+                username.value=username.value + e.value;
+        }
+        var hasFocusPin=$('#password').is(':focus');
+        if (hasFocusPin){
+            var tbInput = document.getElementById("password");
+            password.value=password.value + e.value;
+        }
+        */
     }
 
     function back() {

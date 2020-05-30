@@ -16,10 +16,8 @@ import org.springframework.retry.annotation.EnableRetry;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import static org.mockito.Mockito.*;
-
 @RunWith(SpringRunner.class)
-@SpringBootTest()
+@SpringBootTest(classes = {JwtAuthenticationRestApplication.class})
 @ActiveProfiles("test")
 public class justtest {
 
@@ -31,9 +29,10 @@ public class justtest {
 
     @Test
     public void shouldInjectService() throws NotHavingSufficentBalance {
-        System.out.println(accountRepository.findByUsername("user"));
+        System.out.println(accountRepository.findByUsername("987654"));
         transactionService.withdraw_and_update_transaction("user", "Deposit", 120.00, "hi");
-        System.out.println(accountRepository.findByUsername("user"));
+        System.out.println(accountRepository.findByUsername("987654"));
         System.out.println(accountRepository==null);
     }
+
 }
