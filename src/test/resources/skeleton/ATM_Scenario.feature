@@ -16,4 +16,3 @@ Feature: Test ATM Machine
   Scenario: withdraw balance for new user
     Then Get Token
     Then withdraw balance from the new user
-

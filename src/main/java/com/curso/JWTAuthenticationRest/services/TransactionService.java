@@ -91,6 +91,7 @@ public class TransactionService {
                 throw new NotHavingSufficentBalance("Not Having Sufficient balance");
             }
         }else if (type.equals(DEPOSIT)){
+            System.out.println("Deposit");
             accountRepository.numberOfRRowUpdateForDeposit(balance, logged_in_user);
         }
 

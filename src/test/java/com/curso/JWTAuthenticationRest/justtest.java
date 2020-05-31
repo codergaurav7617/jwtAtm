@@ -34,5 +34,4 @@ public class justtest {
         System.out.println(accountRepository.findByUsername("987654"));
         System.out.println(accountRepository==null);
     }
-
 }
