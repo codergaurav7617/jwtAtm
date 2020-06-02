@@ -81,7 +81,6 @@
             amount.value=amount.value + e.value;
         }
     }
-
     function back() {
         var tbInput = document.getElementById("amount");
         amount.value = amount.value.substr(0, amount.value.length-1);
@@ -91,10 +90,15 @@
         var tbInput = document.getElementById("amount");
         amount.value = "";
     }
-
 </script>
 
+<!-- for REROUTING to the login page after 20 second-->
 
-
+<script>
+   window.setTimeout(function () {
+       var newUrl=window.location.protocol+"//"+window.location.host+"/login";
+        window.location.href=newUrl;
+   },20000);
+</script>
 </body>
 </html>

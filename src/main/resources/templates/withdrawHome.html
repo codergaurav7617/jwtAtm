@@ -112,6 +112,14 @@
 </script>
 
 <script>
+    window.setTimeout(function () {
+        var newUrl=window.location.protocol+"//"+window.location.host+"/login";
+        window.location.href=newUrl;
+    },20000);
+</script>
+
+
+<script>
     $('#form2')
         .ajaxForm({
             url : '/transaction/type', // url
