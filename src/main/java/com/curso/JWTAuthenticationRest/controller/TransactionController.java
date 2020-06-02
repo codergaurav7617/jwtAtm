@@ -45,6 +45,9 @@ public class TransactionController {
 
         ModelAndView mv= transactionService.getView(TransactionHistory);
         mv.addObject(DATA, list_of_txn);
+
+        String  amount="Your balance is : " + transactionService.getBalance(logged_in_user);   // get the total balance in the logged in user account
+        mv.addObject(VAL,amount);
         return mv;
     }
 

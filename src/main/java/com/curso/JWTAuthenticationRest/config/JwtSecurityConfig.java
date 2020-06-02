@@ -52,6 +52,7 @@ public class JwtSecurityConfig extends WebSecurityConfigurerAdapter implements W
         registry.addViewController("/SignUp").setViewName("SignUp");
         registry.addViewController("/login").setViewName("login");
         registry.addViewController("/txn").setViewName("Transaction_Type");
+        registry.addViewController("/").setViewName("login");
     }
 
     @Override
@@ -66,5 +67,4 @@ public class JwtSecurityConfig extends WebSecurityConfigurerAdapter implements W
         httpSecurity.addFilterBefore(authenticationTokenFilter(), UsernamePasswordAuthenticationFilter.class);
         httpSecurity.headers().frameOptions().sameOrigin();
     }
-
 }

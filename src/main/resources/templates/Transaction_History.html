@@ -21,6 +21,8 @@
     </style>
 </head>
 <body>
+<h1 th:text="${val}" th:align="center"></h1>
+<br><br>
 <h2 align="center">All the previous transaction of the user:</h2>
 <br/>
 <div>
@@ -46,15 +48,14 @@
     </table>
 </div>
 
-<br><br>
 
-<form action="/token/logout" method="get" th:align="center" th:form="form2">
-    <input type="submit" class="btn btn-secondary" value="Sign Out"/>
-    <br><br>
-</form>
-<form th:action="@{/txn}" method="get" th:align="center">
-    <input class="btn btn-secondary" type="submit" value="Home"/>
-</form>
+<!--<form action="/token/logout" method="get" th:align="center" th:form="form2">-->
+<!--    <input type="submit" class="btn btn-secondary" value="Sign Out"/>-->
+<!--    <br><br>-->
+<!--</form>-->
+<!--<form th:action="@{/txn}" method="get" th:align="center">-->
+<!--    <input class="btn btn-secondary" type="submit" value="Home"/>-->
+<!--</form>-->
 
 
 <div id="VirtualKey" align="center">

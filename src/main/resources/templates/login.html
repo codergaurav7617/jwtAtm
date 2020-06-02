@@ -42,7 +42,6 @@
          }
 
     </style>
-
 </head>
 
 <body>
@@ -56,11 +55,11 @@
                         <h3 class="text-center text-info">Login</h3>
                         <div class="form-group">
                             <label for="username" class="text-info">Username:</label><br>
-                            <input type="text" onclick="c(this.id)" name="user" id="username" class="form-control" >
+                            <input type="text" onclick="c(this.id)" name="user" id="username" onkeydown="return false" class="form-control" >
                         </div>
                         <div class="form-group">
                             <label for="password" class="text-info">pin:</label><br>
-                            <input type="password" onclick="c(this.id)" name="pin" id="password" class="form-control">
+                            <input type="password" onclick="c(this.id)" onkeydown="return false" name="pin" id="password" class="form-control">
                         </div>
 <!--                        <div class="form-group" th:align="center">-->
 <!--                            <input type="submit"  form="form2" name="submit" class="btn btn-info btn-md" value="submit" autofocus>-->

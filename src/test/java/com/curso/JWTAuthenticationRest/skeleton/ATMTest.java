@@ -3,19 +3,27 @@ package com.curso.JWTAuthenticationRest.skeleton;
 import com.curso.JWTAuthenticationRest.exception.NotHavingSufficentBalance;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
+import lombok.val;
 import org.junit.Assert;
 import org.junit.runner.RunWith;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
+
+import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Collections;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
-@RunWith(SpringRunner.class)
 public class ATMTest {
     RestTemplate restTemplate = new RestTemplate();
 
@@ -24,7 +32,7 @@ public class ATMTest {
     private String token;
     @Given("Get Token")
     public void Get_Token() throws Throwable {
-        String response = restTemplate.postForEntity("http://localhost:8061/token?user=" + username +
+        String response = restTemplate.postForEntity("http://localhost:8062/token?user=" + username +
                 "&&pin=" + password, "", String.class).getBody();
         System.out.println(response);
         token = response.substring(2, response.length()-2);
@@ -42,7 +50,7 @@ public class ATMTest {
 
         HttpEntity entity = new HttpEntity(headers);
 
-        String response = restTemplate.postForEntity("http://localhost:8061/transaction/type?username=" + username +
+        String response = restTemplate.postForEntity("http://localhost:8062/transaction/type?username=" + username +
                 "&txnType=view", entity, String.class).getBody();
         System.out.println(response);
         Assert.assertTrue(response.contains("<span>100.0</span>"));
@@ -104,7 +112,7 @@ public class ATMTest {
         headers.add("Authorization", "Bearer " + token);
 
         HttpEntity entity = new HttpEntity(headers);
-        String response = restTemplate.postForEntity("http://localhost:8061/transaction/type?username=" + username +
+        String response = restTemplate.postForEntity("http://localhost:8062/transaction/type?username=" + username +
                 "&txnType=Deposit"+ "&amount=50", entity, String.class).getBody();
          return response;
     }
@@ -118,38 +126,85 @@ public class ATMTest {
         headers.add("Authorization", "Bearer " + token);
 
         HttpEntity entity = new HttpEntity(headers);
-        String response = restTemplate.postForEntity("http://localhost:8061/transaction/type?username=" + username +
+        String response = restTemplate.postForEntity("http://localhost:8062/transaction/type?username=" + username +
                 "&txnType=withdraw"+ "&amount=50", entity, String.class).getBody();
         //Assert.assertTrue(response.contains(" <title>Transaction Sucessful</title>"));
         return response;
     }
 
     @Then("withdraw balance from the new user")
-    public void withdraw_balance_for_new_user() throws NotHavingSufficentBalance {
+    public void withdraw_balance_for_new_user() throws NotHavingSufficentBalance, ClassNotFoundException {
 
         HttpHeaders headers=new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
         headers.add("Authorization", "Bearer " + token);
 
+
+        
         HttpEntity entity = new HttpEntity(headers);
 
         try {
-            String response = restTemplate.postForEntity("http://localhost:8061/transaction/type?username=" + username +
-                    "&txnType=Deposit" + "&amount=9007199254740993", entity, String.class).getBody();
-            System.out.println(response);
+            String response = restTemplate.postForEntity("http://localhost:8062/transaction/type?username=" + username +
+                    "&txnType=Deposit" + "&amount=50", entity, String.class).getBody();
         }catch (HttpStatusCodeException ex) {
             String response = ex.getResponseBodyAsString();
-            System.out.println(response);
             Assert.assertTrue(response.contains("null"));
        }
-        String response1 = restTemplate.postForEntity("http://localhost:8061/transaction/type?username=" + username +
+        String response1 = restTemplate.postForEntity("http://localhost:8062/transaction/type?username=" + username +
                 "&txnType=view", entity, String.class).getBody();
 
-        System.out.println(response1);
+        String history=restTemplate.postForEntity("http://localhost:8062/transaction/history?username=" + username, entity, String.class).getBody();
 
-        String history=restTemplate.postForEntity("http://localhost:8061/transaction/history?username=" + username, entity, String.class).getBody();
+        DataSource ds = getdataSource();
+        final String SQL_SLECT="SELECT * FROM ACCOUNT WHERE username='987654' ";
+        Connection con=null;
+        PreparedStatement stmt=null;
+        ResultSet rs=null;
+        try{
+            con=ds.getConnection();
+            stmt=con.prepareStatement(SQL_SLECT);
+            rs=stmt.executeQuery();
+            while ( rs.next() ) {
+                System.out.println(rs.getDouble("AMOUNT"));
+            }
 
-        System.out.println(history);
+                if (!rs.isBeforeFirst() ) {
+                System.out.println("No data");
+            }
+           
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }finally {
+            if (rs!=null){
+                try{
+                    rs.close();
+                }catch (SQLException e){}
+
+            }
+            if (con!=null){
+                try{
+                    con.close();
+                }catch (SQLException e){}
+
+            }
+            if (stmt!=null){
+                try{
+                    stmt.close();
+                }catch (SQLException e){}
+            }
+        }
     }
+
+    public DataSource getdataSource() {
+        DriverManagerDataSource dataSource = new DriverManagerDataSource();
+        dataSource.setDriverClassName("org.h2.Driver");
+        dataSource.setUrl("jdbc:h2:file:C:/h2Databases/sample;DB_CLOSE_ON_EXIT=FALSE;AUTO_SERVER=TRUE");
+        dataSource.setUsername("sa");
+        dataSource.setPassword("");
+        return dataSource;
+    }
+
+
+
 }
